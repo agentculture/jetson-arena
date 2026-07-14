@@ -3,10 +3,8 @@ import site from "../data/site";
 import Mark from "./Mark.astro";
 
 const links = [
-  { href: "/learn/", label: "Learn" },
-  { href: "/framework/", label: "Framework" },
-  { href: "/agents/", label: "Agents" },
-  { href: "/engage/", label: "Engage" },
+  ...site.nav,
+  { href: "https://github.com/agentculture/jetson-arena", label: "GitHub" },
 ];
 
 const year = new Date().getFullYear();
@@ -17,7 +15,7 @@ const year = new Date().getFullYear();
     <div class="row">
       <a class="wordmark" href="/">
         <Mark size={22} />
-        <span>{site.hero.title}</span>
+        <span>{site.name}</span>
       </a>
       <nav aria-label="Footer">
         <ul>
@@ -32,9 +30,9 @@ const year = new Date().getFullYear();
       </nav>
     </div>
     <p class="note">
-      This site is built and operated by the organization's agents.
+      This site is built and operated by the arena's agent.
       <span class="sep" aria-hidden="true">·</span>
-      © {year} {site.hero.title}
+      © {year} {site.name}
     </p>
   </div>
 </footer>
