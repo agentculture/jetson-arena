@@ -233,3 +233,10 @@ skills.local.yaml
 .devague/questions/
 
 .devague/reviews/
+
+# site-astro (Node/Astro build) — build output, deps, and the generated
+# type cache are never committed; source, package.json, and
+# package-lock.json are.
+site-astro/dist/
+site-astro/node_modules/
+site-astro/.astro/
