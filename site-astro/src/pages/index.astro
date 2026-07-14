@@ -5,35 +5,51 @@ import site from "../data/site";
 
 const { hero } = site;
 
-// Wayfinding only — the pages themselves carry the real content.
-const teasers = [
+// The canonical first target — named before anything is measured.
+const target = {
+  device: "Jetson Orin Nano Super 8GB",
+  pipeline: "realtime voice loop",
+  stages: [
+    { abbr: "VAD", name: "voice activity detection" },
+    { abbr: "STT", name: "speech to text" },
+    { abbr: "LLM", name: "language model" },
+    { abbr: "TTS", name: "text to speech" },
+  ],
+} as const;
+
+// The three axes every published run will carry. Each names what WILL be
+// measured — never a result, never a number. Keep it that way until the
+// harness exists and the first run is real.
+const axes = [
   {
-    href: "/framework/",
-    label: "Framework",
-    copy: "The ideas the organization grows by, and the pillars that carry them.",
-    glyph: "framework",
+    name: "Latency",
+    sub: "End to end, and per stage",
+    copy: "The wall-clock story of one turn: from the end of speech to the first audible reply, and where inside the pipeline that time goes. Every published run will carry the full breakdown, not a single headline figure.",
   },
   {
-    href: "/agents/",
-    label: "Agents",
-    copy: "Who tends the mesh — a directory of the organization's agents.",
-    glyph: "agents",
+    name: "Memory signature",
+    sub: "On unified memory",
+    copy: "CPU and GPU share one pool on a Jetson, so the stack's whole footprint is what matters. Runs will record what each stage holds resident, and what remains for everything else on the board.",
   },
   {
-    href: "/engage/",
-    label: "Engage",
-    copy: "Where to follow along, ask questions, or take part.",
-    glyph: "engage",
+    name: "Quality",
+    sub: "Honest, per stage",
+    copy: "A loop that replies fast but mishears the question has not won anything. Each stage will be scored against its own task, and every trade-off made to fit the device will be stated with the run.",
   },
 ] as const;
 ---
 
-<Layout title={hero.title} description={hero.tagline}>
+<Layout title={site.name} description={site.description}>
   <section class="hero" aria-labelledby="hero-title">
     <div class="container hero-copy">
-      <h1 id="hero-title" data-reveal>{hero.title}</h1>
+      <h1 id="hero-title" data-reveal>{site.name}</h1>
       <p class="tagline" data-reveal style="--reveal-delay: 0.14s">
         {hero.tagline}
+      </p>
+      <p class="target-chip" data-reveal style="--reveal-delay: 0.24s">
+        <span class="chip-label">First target</span>
+        <span class="chip-device">{target.device}</span>
+        <span class="chip-chain">{target.pipeline}: VAD → STT → LLM → TTS</span>
       </p>
     </div>
     <div class="hero-scene" data-reveal style="--reveal-delay: 0.3s">
@@ -58,67 +74,77 @@ const teasers = [
     </div>
   </section>
 
-  <section class="section explore" aria-label="Explore">
+  <section class="section target" aria-labelledby="target-title">
     <div class="container">
-      <ul class="teasers">
+      <span class="eyebrow" data-reveal>The first target</span>
+      <h2 id="target-title" data-reveal>{target.device}</h2>
+      <p class="lede" data-reveal style="--reveal-delay: 0.1s">
+        A {target.pipeline}, running whole on one small board: speak, and hear
+        the reply.
+      </p>
+      <ol class="pipeline" aria-label="Pipeline stages, in order">
         {
-          teasers.map(({ href, label, copy, glyph }, i) => (
+          target.stages.map(({ abbr, name }, i) => (
+            <li data-reveal style={`--reveal-delay: ${(0.12 + i * 0.1).toFixed(2)}s`}>
+              <span class="node" aria-hidden="true" />
+              <span class="abbr">{abbr}</span>
+              <span class="stage muted">{name}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="muted prose" data-reveal>
+        Four stages contending for one pool of unified memory, in a loop a
+        person can feel. It is exactly the kind of stack that only makes sense
+        measured whole — and none of it is measured yet.
+      </p>
+    </div>
+  </section>
+
+  <section class="section axes" aria-labelledby="axes-title">
+    <div class="container">
+      <span class="eyebrow" data-reveal>What we measure</span>
+      <h2 id="axes-title" data-reveal>Three axes, stated before any number exists</h2>
+      <ul class="axis-grid">
+        {
+          axes.map(({ name, sub, copy }, i) => (
             <li data-reveal style={`--reveal-delay: ${i * 0.12}s`}>
-              <a class="card teaser" href={href}>
-                <span class="glyph" aria-hidden="true">
-                  {glyph === "framework" && (
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                      <path
-                        d="M8 32 Q 12 22 14 12 M20 32 Q 20 20 20 8 M32 32 Q 28 24 26 14"
-                        stroke="currentColor"
-                        stroke-width="1.6"
-                        stroke-linecap="round"
-                      />
-                      <circle cx="14" cy="12" r="3" fill="currentColor" />
-                      <circle cx="20" cy="8" r="3.4" fill="currentColor" />
-                      <circle cx="26" cy="14" r="2.7" fill="currentColor" />
-                    </svg>
-                  )}
-                  {glyph === "agents" && (
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                      <path
-                        d="M10 28 Q 15 20 20 13 M20 13 Q 26 20 31 26 M10 28 Q 20 30 31 26"
-                        stroke="currentColor"
-                        stroke-width="1.6"
-                        stroke-linecap="round"
-                      />
-                      <circle cx="10" cy="28" r="3.2" fill="currentColor" />
-                      <circle cx="20" cy="13" r="3.6" fill="currentColor" />
-                      <circle cx="31" cy="26" r="3" fill="currentColor" />
-                    </svg>
-                  )}
-                  {glyph === "engage" && (
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                      <circle cx="20" cy="22" r="3.4" fill="currentColor" />
-                      <path
-                        d="M11 15 a12 12 0 0 1 18 0"
-                        stroke="currentColor"
-                        stroke-width="1.6"
-                        stroke-linecap="round"
-                      />
-                      <path
-                        d="M7 10 a18 18 0 0 1 26 0"
-                        stroke="currentColor"
-                        stroke-width="1.6"
-                        stroke-linecap="round"
-                        opacity="0.55"
-                      />
-                    </svg>
-                  )}
-                </span>
-                <h2>{label}</h2>
+              <div class="card axis">
+                <h3>{name}</h3>
+                <p class="axis-sub">{sub}</p>
                 <p class="muted">{copy}</p>
-                <span class="go" aria-hidden="true">→</span>
-              </a>
+              </div>
             </li>
           ))
         }
       </ul>
+    </div>
+  </section>
+
+  <section class="section repro" aria-labelledby="repro-title">
+    <div class="container prose">
+      <span class="eyebrow" data-reveal>Reproducible by design</span>
+      <h2 id="repro-title" data-reveal>Every run will ship its recipe</h2>
+      <p data-reveal>
+        Every published run will come with the Docker recipe that reproduces
+        it — the exact containers, models, and flags, building on the <a
+          href="https://github.com/dusty-nv/jetson-containers"
+        >jetson-containers</a> family. Own the device, rerun the arena: a
+        result you cannot reproduce is a result you should not trust.
+      </p>
+    </div>
+  </section>
+
+  <section class="section arena-teaser" aria-label="The arena">
+    <div class="container">
+      <a class="card arena-cta" href="/arena/" data-reveal>
+        <h2>The arena</h2>
+        <p class="muted">
+          Where published runs will land — one device, one stack, one recipe at
+          a time.
+        </p>
+        <span class="go" aria-hidden="true">→</span>
+      </a>
     </div>
   </section>
 </Layout>
@@ -144,6 +170,43 @@ const teasers = [
     color: var(--ink-soft);
     margin-inline: auto;
     max-width: 34em;
+  }
+
+  /* the hook: the canonical first target, named above the fold */
+  .target-chip {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    column-gap: 0.7rem;
+    row-gap: 0.15rem;
+    margin-top: 1.5rem;
+    padding: 0.6rem 1.3rem;
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    border-radius: 1.2rem;
+    box-shadow: var(--shadow);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .chip-label {
+    font-size: 0.72rem;
+    font-weight: 640;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .chip-device {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .chip-chain {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--ink-soft);
   }
 
   .hero-scene {
@@ -210,7 +273,7 @@ const teasers = [
     );
   }
 
-  /* a single agent descending its thread, inviting the scroll */
+  /* a single node descending its thread, inviting the scroll */
   .scroll-hint {
     position: relative;
     width: 1px;
@@ -253,40 +316,114 @@ const teasers = [
     }
   }
 
-  .explore {
+  /* the pipeline: stages as nodes on a thread — the mesh vocabulary,
+     laid out in line. Static, like the threads in the hero scene. */
+  .target {
     padding-top: 0;
   }
 
-  .teasers {
+  .pipeline {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 1rem;
+    margin: 2rem 0 1.8rem;
+  }
+
+  .pipeline li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .pipeline li:not(:last-child)::after {
+    content: "";
+    width: clamp(1.4rem, 4vw, 3.2rem);
+    height: 1px;
+    background: var(--mesh-thread);
+    margin-inline: 1rem;
+  }
+
+  .pipeline .node {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--mesh-node);
+    flex: none;
+  }
+
+  .pipeline .abbr {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+  }
+
+  .pipeline .stage {
+    font-size: 0.9rem;
+  }
+
+  .axes {
+    padding-top: 0;
+  }
+
+  .axis-grid {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
     gap: 1.4rem;
+    margin-top: 2.2rem;
   }
 
-  .teaser {
-    position: relative;
+  .axis {
     height: 100%;
-    padding-bottom: 3.2rem;
   }
 
-  .teaser .glyph {
-    display: inline-block;
-    color: var(--accent);
-    margin-bottom: 1.1rem;
-  }
-
-  .teaser h2 {
+  .axis h3 {
     font-size: 1.45rem;
-    margin-bottom: 0.4em;
+    margin-bottom: 0.15em;
   }
 
-  .teaser p {
+  .axis-sub {
+    font-size: 0.78rem;
+    font-weight: 640;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .axis p:last-child {
     font-size: 0.97rem;
     line-height: 1.6;
   }
 
-  .teaser .go {
+  .repro {
+    padding-top: 0;
+  }
+
+  .arena-teaser {
+    padding-top: 0;
+  }
+
+  .arena-cta {
+    position: relative;
+    padding-bottom: 3.2rem;
+  }
+
+  .arena-cta h2 {
+    font-size: 1.45rem;
+    margin-bottom: 0.4em;
+  }
+
+  .arena-cta p {
+    font-size: 0.97rem;
+    line-height: 1.6;
+    max-width: 42rem;
+  }
+
+  .arena-cta .go {
     position: absolute;
     left: 2rem;
     bottom: 1.6rem;
@@ -295,11 +432,11 @@ const teasers = [
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .teaser .go {
+    .arena-cta .go {
       transition: transform 0.35s var(--ease-out);
     }
 
-    .teaser:hover .go {
+    .arena-cta:hover .go {
       transform: translateX(6px);
     }
   }

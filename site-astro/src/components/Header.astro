@@ -2,14 +2,7 @@
 import site from "../data/site";
 import Mark from "./Mark.astro";
 
-const links = [
-  { href: "/learn/", label: "Learn" },
-  { href: "/framework/", label: "Framework" },
-  { href: "/agents/", label: "Agents" },
-  { href: "/engage/", label: "Engage" },
-];
-
-// Normalize so `/framework` and `/framework/` both mark the item current.
+// Normalize so `/arena` and `/arena/` both mark the item current.
 const here = Astro.url.pathname.replace(/\/?$/, "/");
 ---
 
@@ -17,12 +10,12 @@ const here = Astro.url.pathname.replace(/\/?$/, "/");
   <div class="container bar">
     <a class="wordmark" href="/">
       <Mark />
-      <span>{site.hero.title}</span>
+      <span>{site.name}</span>
     </a>
     <nav aria-label="Primary">
       <ul>
         {
-          links.map(({ href, label }) => (
+          site.nav.map(({ href, label }) => (
             <li>
               <a href={href} aria-current={here === href ? "page" : undefined}>
                 {label}

@@ -29,20 +29,15 @@ instead of by a lockfile.
 
 ## Copied files
 
+Still byte-verbatim against the `org` commit above — safe to re-sync:
+
 | Local path | Upstream path (`../org/site-astro/`) | Notes |
 |---|---|---|
 | `site-astro/src/styles/global.css` | `src/styles/global.css` | Verbatim. Design tokens (colors, type, motion) for the whole site — "First light over the mesh" theme. |
-| `site-astro/src/layouts/Layout.astro` | `src/layouts/Layout.astro` | Verbatim. Shared HTML shell: head, fonts, `Header`/`Footer`, scroll-reveal script. |
-| `site-astro/src/components/Header.astro` | `src/components/Header.astro` | Verbatim. Nav links to `/learn/`, `/framework/`, `/agents/`, `/engage/` are copied as-is — see [Known gap](#known-gap-nav-links-to-uncopied-pages) below. |
-| `site-astro/src/components/Footer.astro` | `src/components/Footer.astro` | Verbatim. Same nav-link set as `Header.astro`. |
 | `site-astro/src/components/HeroMesh.astro` | `src/components/HeroMesh.astro` | Verbatim. The hand-placed constellation SVG used on the home hero. No lobes dependency. |
 | `site-astro/src/components/Mark.astro` | `src/components/Mark.astro` | Verbatim. The three-node wordmark glyph used in `Header`/`Footer`. |
 | `site-astro/src/components/PageHero.astro` | `src/components/PageHero.astro` | Verbatim. Sub-page title + intro block; not wired into any page yet since only `index.astro` was copied. |
-| `site-astro/src/data/site.ts` | `src/data/site.ts` | Verbatim, **content included**. This is `org`'s own copy (hero/framework/agents/engage strings describing AgentCulture, not jetson-arena) — a follow-up task must replace the content with jetson-arena's own, while keeping the shape `types.ts` defines. Flagged here so nobody mistakes the AgentCulture copy for finished jetson-arena content. |
-| `site-astro/src/data/types.ts` | `src/data/types.ts` | Verbatim. The `SiteData` shape contract `site.ts` must satisfy. |
-| `site-astro/src/pages/index.astro` | `src/pages/index.astro` | Verbatim, **temporary placeholder**. Copied only so `astro build` has an entrypoint; a later task rewrites it for jetson-arena's own home page. Confirmed to import only `Layout`, `HeroMesh`, and `site` data — no `lobes` import, so no strip was needed (see [Divergences](#divergences)). |
 | `site-astro/tsconfig.json` | `tsconfig.json` | Verbatim. |
-| `site-astro/public/favicon.svg` | `public/favicon.svg` | Verbatim. Referenced by `Layout.astro` (`<link rel="icon">`). |
 | `site-astro/public/apple-touch-icon.png` | `public/apple-touch-icon.png` | Verbatim. Referenced by `Layout.astro` (`<link rel="apple-touch-icon">`). |
 
 `package.json`, `astro.config.mjs`, and `package-lock.json` are **not**
@@ -68,25 +63,35 @@ copied, since jetson-arena is not building the AgentCulture org site:
 
 ## Divergences
 
-**None required.** The task's contingency — "if `index.astro` imports lobes
-components, strip those imports/sections minimally and note it here" — did
-not trigger: `index.astro`'s frontmatter imports only `Layout.astro`,
-`HeroMesh.astro`, and `../data/site`, none of which touch `lobes.ts`,
-`lobes-captures.ts`, `LobesDiagram.astro`, or `LobesTerminal.astro`. All 13
-files above were copied byte-for-byte with no edits (verified by `sha256sum`
-against the `org` source at copy time).
+At copy time, none were required — all 13 files were copied byte-for-byte
+(verified by `sha256sum` against the `org` source), and the task's
+contingency ("if `index.astro` imports lobes components, strip those
+imports/sections minimally") did not trigger.
 
-### Known gap: nav links to uncopied pages
+The **jetson-arena rebrand** (task t3) then intentionally diverged the
+files below from the `org` copy. Per this ledger's own convention they have
+graduated out of the cited set: they are jetson-arena's own now, and are
+**never re-synced verbatim** from `org` again (a future re-sync must be a
+reviewed, by-hand merge).
 
-`Header.astro` and `Footer.astro` were copied verbatim, and both contain
-plain `<a href>` nav links to `/learn/`, `/framework/`, `/agents/`, and
-`/engage/`. These are **hrefs, not imports** — they don't affect the Astro
-build (`npm run build` exits 0; no missing-module error) — but none of those
-routes exist in this site yet, since only `index.astro` was copied. Visiting
-those links in the built `dist/` will 404 until a later task adds the
-corresponding pages or trims the nav. This is not a divergence from the
-`org` source (the files are copied verbatim) — it's a known gap in the
-scaffold, left for the task that builds out the rest of the site.
+### Diverged — no longer re-synced
+
+| Local path | What changed, relative to the `org` copy |
+|---|---|
+| `site-astro/src/data/site.ts` | Content fully rewritten for jetson-arena: `name`/`url`/`description`, `nav` = Home (`/`) + Arena (`/arena/`) only, and a jetson-arena hero. The org's framework/agents/engage content is gone. No value states or implies a measured result — nothing is measured yet. |
+| `site-astro/src/data/types.ts` | Shape reshaped for jetson-arena: `SiteData` is now `name`/`url`/`description`/`nav`/`hero` (plus `NavLink`); the org's `framework`/`agents`/`engage` interfaces were dropped. Strictly necessary — the org shape had no site identity or nav for the shared components to read. |
+| `site-astro/src/components/Header.astro` | Wordmark and nav now read `site.name` / `site.nav` from the data layer; hard-coded links to `/learn/`, `/framework/`, `/agents/`, `/engage/` removed. Styles byte-identical to the org copy. |
+| `site-astro/src/components/Footer.astro` | Same data-layer switch as `Header.astro`, plus a GitHub link to `https://github.com/agentculture/jetson-arena` and a rebranded operator note. Styles byte-identical to the org copy. |
+| `site-astro/src/pages/index.astro` | Rewritten as jetson-arena's home page: hero leads with the first target (Jetson Orin Nano Super 8GB, realtime voice loop VAD → STT → LLM → TTS), the three axes as *what will be measured*, and the reproducible-by-design note. Reuses the org hero/scroll-hint/card CSS verbatim; new sections (target chip, pipeline chain, axis grid) use only existing tokens and the existing motion system. Zero numeric performance figures. |
+| `site-astro/src/layouts/Layout.astro` | One meta change: `og:site_name` reads `site.name` instead of `site.hero.title` (the org shape's field). Everything else byte-identical. |
+| `site-astro/public/favicon.svg` | XML comment retitled from AgentCulture to Jetson Arena so no AgentCulture string ships in `dist/`. The drawn mark (paths, colors) is byte-identical. |
+
+### Known gap: nav link to the not-yet-built arena page
+
+`site.nav` links to `/arena/`, but `src/pages/arena.astro` is owned by a
+later task and does not exist yet, so that nav link 404s in the built
+`dist/` until it lands. This is deliberate — the nav contract (Home +
+Arena) is fixed here; the page follows.
 
 ## Fresh (non-cited) files
 
@@ -119,21 +124,23 @@ scaffold, left for the task that builds out the rest of the site.
 
 ```bash
 # Diff a cited file against upstream before pulling a refresh:
-diff -u ../org/site-astro/src/layouts/Layout.astro site-astro/src/layouts/Layout.astro
+diff -u ../org/site-astro/src/styles/global.css site-astro/src/styles/global.css
 
-# Pull one file fresh (verbatim citations only — package.json,
-# astro.config.mjs, and package-lock.json are jetson-arena's own and are
-# never overwritten from org):
-cp ../org/site-astro/src/components/Header.astro site-astro/src/components/Header.astro
+# Pull one file fresh (verbatim citations only — the diverged files above,
+# plus package.json, astro.config.mjs, and package-lock.json, are
+# jetson-arena's own and are never overwritten from org):
+cp ../org/site-astro/src/components/HeroMesh.astro site-astro/src/components/HeroMesh.astro
 
 # Re-verify the build still exits 0 after any re-sync:
 cd site-astro && npm run build
 ```
 
-If a re-sync would lose a jetson-arena-specific edit (e.g. `site.ts` content
-once it's rewritten for jetson-arena), that file graduates out of the cited
-set — drop its row above into a new "diverged, no longer re-synced" note
-rather than silently overwriting it next time.
+If a re-sync would lose a jetson-arena-specific edit, that file graduates
+out of the cited set — drop its row from "Copied files" into the
+[Diverged — no longer re-synced](#diverged--no-longer-re-synced) table
+rather than silently overwriting it next time. That is exactly what
+happened to `site.ts`, `types.ts`, `Header.astro`, `Footer.astro`,
+`index.astro`, `Layout.astro`, and `favicon.svg` in the t3 rebrand.
 
 ## Tooling prerequisites
 
