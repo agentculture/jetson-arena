@@ -7,7 +7,7 @@ const { hero } = site;
 
 // The canonical first target — named before anything is measured.
 const target = {
-  device: "Jetson Orin Nano Super 8GB",
+  device: "Jetson Thor",
   pipeline: "realtime voice loop",
   stages: [
     { abbr: "VAD", name: "voice activity detection" },
@@ -79,8 +79,8 @@ const axes = [
       <span class="eyebrow" data-reveal>The first target</span>
       <h2 id="target-title" data-reveal>{target.device}</h2>
       <p class="lede" data-reveal style="--reveal-delay: 0.1s">
-        A {target.pipeline}, running whole on one small board: speak, and hear
-        the reply.
+        A {target.pipeline}, running whole on one board: speak, and hear the
+        reply.
       </p>
       <ol class="pipeline" aria-label="Pipeline stages, in order">
         {
@@ -95,8 +95,9 @@ const axes = [
       </ol>
       <p class="muted prose" data-reveal>
         Four stages contending for one pool of unified memory, in a loop a
-        person can feel. It is exactly the kind of stack that only makes sense
-        measured whole — and none of it is measured yet.
+        person can feel. It is exactly the kind of setup that only makes sense
+        measured whole — and none of it is measured yet. Next in line: Jetson
+        AGX Orin on JetPack 7.2, then Jetson Orin Nano Super 8GB.
       </p>
     </div>
   </section>
@@ -140,7 +141,7 @@ const axes = [
       <a class="card arena-cta" href="/arena/" data-reveal>
         <h2>The arena</h2>
         <p class="muted">
-          Where published runs will land — one device, one stack, one recipe at
+          Where published runs will land — one device, one setup, one recipe at
           a time.
         </p>
         <span class="go" aria-hidden="true">→</span>

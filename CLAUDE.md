@@ -5,18 +5,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## The agent
 
 **jetson-arena** answers one question: *how does a given Jetson device handle a
-whole model stack?* Not a single model in isolation — the whole pipeline
-(e.g. realtime VAD → STT → LLM → TTS on an Orin Nano Super 8GB), measured for
-**latency**, **memory signature**, and **quality**. The agent benchmarks those
-pipelines, publishes the results together with the Docker build recipes that
-reproduce them, and maintains the arena's public site.
+given model setup?* A single model, a mixture of models, or a whole pipeline
+(the flagship example: realtime VAD → STT → LLM → TTS), measured for
+**latency**, **memory signature**, and **quality**. Device order per the
+operator: Jetson Thor first, then AGX Orin on JetPack 7.2, then Orin Nano
+Super 8GB. The agent benchmarks those setups, publishes the results together
+with the Docker build recipes that reproduce them, and maintains the arena's
+public site, jetson-arena.com.
 
 **Read this before you build anything:** the domain surface does not exist yet.
 This repo was scaffolded from `culture-agent-template` and everything in
 `jetson_arena/` today is the template's agent-first CLI (`whoami`, `learn`,
 `explain`, `overview`, `doctor`, `cli overview`). There is no benchmark runner,
-no device probe, no recipe store, no site. The intended shape — nouns, run
-model, artifacts — is sketched in [`docs/scope.md`](docs/scope.md), which is a
+no device probe, no recipe store. The public site is live at jetson-arena.com
+(`site-astro/`, deployed per `docs/hosting-runbook.md`). The remaining
+intended shape — nouns, run model, artifacts — is sketched in [`docs/scope.md`](docs/scope.md), which is a
 sketch and not a spec. Converge it with the `/think` skill before implementing;
 do not invent a domain design mid-task and ship it.
 

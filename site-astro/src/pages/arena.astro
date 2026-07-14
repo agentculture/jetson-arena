@@ -15,10 +15,10 @@ const intro = [
 ];
 
 // A run, defined before one exists. This is the unit the arena publishes:
-// one device, one ordered pipeline, measured together — never a model
-// benchmarked alone.
+// one device, one setup — a single model, a mixture, or an ordered
+// pipeline — measured together as one system.
 const runDefinition =
-  "A run pairs one specific Jetson device with one ordered model pipeline — the stages a real stack runs, in the order it runs them — and measures that pairing as a single system, not as isolated models. Every run will ship with the Docker recipe that reproduces it: the exact containers, models, and flags. Own the device, rerun the arena.";
+  "A run pairs one specific Jetson device with one setup — a single model, a mixture of models, or an ordered pipeline, under a pinned config — and measures that pairing as a single system, not as isolated parts. Every run will ship with the Docker recipe that reproduces it: the exact containers, models, and flags. Own the device, rerun the arena.";
 
 // The three axes every published run will carry. Each names what WILL be
 // measured — never a result, never a number.
@@ -31,7 +31,7 @@ const axes = [
   {
     name: "Memory signature",
     sub: "On unified memory",
-    copy: "CPU and GPU share one pool on a Jetson, so the stack's whole footprint is what matters. Runs will record what each stage holds resident, and what remains for everything else on the board.",
+    copy: "CPU and GPU share one pool on a Jetson, so the setup's whole footprint is what matters. Runs will record what each stage holds resident, and what remains for everything else on the board.",
   },
   {
     name: "Quality",
@@ -43,7 +43,7 @@ const axes = [
 // The canonical first target — named before anything is measured. Kept
 // consistent with the homepage's phrasing.
 const target = {
-  device: "Jetson Orin Nano Super 8GB",
+  device: "Jetson Thor",
   pipeline: "realtime voice loop",
   stages: [
     { abbr: "VAD", name: "voice activity detection" },
@@ -73,7 +73,7 @@ const links = [
   <section class="section" aria-labelledby="run-title">
     <div class="container prose">
       <span class="eyebrow" data-reveal>What a run is</span>
-      <h2 id="run-title" data-reveal>One device, one stack, measured whole</h2>
+      <h2 id="run-title" data-reveal>One device, one setup, measured whole</h2>
       <p data-reveal>{runDefinition}</p>
     </div>
   </section>
@@ -103,9 +103,8 @@ const links = [
       <span class="eyebrow" data-reveal>The first target</span>
       <h2 id="target-title" data-reveal>{target.device}</h2>
       <p class="lede" data-reveal style="--reveal-delay: 0.1s">
-        A {target.pipeline}, running whole on one small board: speak, and
-        hear the reply. It is the first pipeline the arena will publish a run
-        for.
+        A {target.pipeline}, running whole on one board: speak, and hear the
+        reply. It is the first setup the arena will publish a run for.
       </p>
       <ol class="pipeline" aria-label="Pipeline stages, in order">
         {
@@ -121,7 +120,8 @@ const links = [
       <p class="muted prose" data-reveal>
         Four stages contending for one pool of unified memory, in a loop a
         person can feel. None of it is measured yet — this is only where the
-        result will go once it is.
+        result will go once it is. Next in line: Jetson AGX Orin on JetPack
+        7.2, then Jetson Orin Nano Super 8GB.
       </p>
     </div>
   </section>

@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/). This project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.2] - 2026-07-14
+
+### Changed
+
+- Site copy: arena scope broadened to any setup (single model, mixture, whole pipeline); device roadmap reordered — first target Jetson Thor, then AGX Orin on JetPack 7.2, then Orin Nano Super 8GB
+
 ## [0.6.0] - 2026-07-14
 
 ### Added
