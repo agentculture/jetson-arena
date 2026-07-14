@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/). This project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-07-14
+
+### Added
+
+- Public site under site-astro/: Astro static build cited from agentculture/org design system (provenance in docs/site-sources.md), homepage leading with the Orin Nano Super 8GB voice-loop first target, /arena/ page in an honest empty state
+- Repeatable WCAG contrast + reduced-motion verification (site-astro/scripts/check-contrast.mjs, npm run check:contrast) with results recorded in docs/site-sources.md
+- deploy-site GitHub Actions workflow: build site-astro/ and wrangler pages deploy on pushes to main touching site-astro/**
+- docs/hosting-runbook.md: verified pre-wiring state of the jetson-arena.com zone (token scope gap + existing GitHub Pages placeholder recorded)
+- devague spec and plan for the site + Cloudflare hosting leg of issue #1 (docs/specs/, docs/plans/, .devague/)
+
 ## [0.5.0] - 2026-07-14
 
 ### Added

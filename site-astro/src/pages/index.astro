@@ -1,0 +1,443 @@
+---
+import Layout from "../layouts/Layout.astro";
+import HeroMesh from "../components/HeroMesh.astro";
+import site from "../data/site";
+
+const { hero } = site;
+
+// The canonical first target — named before anything is measured.
+const target = {
+  device: "Jetson Orin Nano Super 8GB",
+  pipeline: "realtime voice loop",
+  stages: [
+    { abbr: "VAD", name: "voice activity detection" },
+    { abbr: "STT", name: "speech to text" },
+    { abbr: "LLM", name: "language model" },
+    { abbr: "TTS", name: "text to speech" },
+  ],
+} as const;
+
+// The three axes every published run will carry. Each names what WILL be
+// measured — never a result, never a number. Keep it that way until the
+// harness exists and the first run is real.
+const axes = [
+  {
+    name: "Latency",
+    sub: "End to end, and per stage",
+    copy: "The wall-clock story of one turn: from the end of speech to the first audible reply, and where inside the pipeline that time goes. Every published run will carry the full breakdown, not a single headline figure.",
+  },
+  {
+    name: "Memory signature",
+    sub: "On unified memory",
+    copy: "CPU and GPU share one pool on a Jetson, so the stack's whole footprint is what matters. Runs will record what each stage holds resident, and what remains for everything else on the board.",
+  },
+  {
+    name: "Quality",
+    sub: "Honest, per stage",
+    copy: "A loop that replies fast but mishears the question has not won anything. Each stage will be scored against its own task, and every trade-off made to fit the device will be stated with the run.",
+  },
+] as const;
+---
+
+<Layout title={site.name} description={site.description}>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero-copy">
+      <h1 id="hero-title" data-reveal>{site.name}</h1>
+      <p class="tagline" data-reveal style="--reveal-delay: 0.14s">
+        {hero.tagline}
+      </p>
+      <p class="target-chip" data-reveal style="--reveal-delay: 0.24s">
+        <span class="chip-label">First target</span>
+        <span class="chip-device">{target.device}</span>
+        <span class="chip-chain">{target.pipeline}: VAD → STT → LLM → TTS</span>
+      </p>
+    </div>
+    <div class="hero-scene" data-reveal style="--reveal-delay: 0.3s">
+      <HeroMesh />
+      <div class="horizon" aria-hidden="true"></div>
+    </div>
+    <div class="scroll-hint" aria-hidden="true">
+      <span class="hint-thread"></span>
+      <span class="hint-node"></span>
+    </div>
+  </section>
+
+  <section class="section" aria-label="About">
+    <div class="container prose">
+      {
+        hero.intro.map((paragraph, i) => (
+          <p class={i === 0 ? "lede" : undefined} data-reveal>
+            {paragraph}
+          </p>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section target" aria-labelledby="target-title">
+    <div class="container">
+      <span class="eyebrow" data-reveal>The first target</span>
+      <h2 id="target-title" data-reveal>{target.device}</h2>
+      <p class="lede" data-reveal style="--reveal-delay: 0.1s">
+        A {target.pipeline}, running whole on one small board: speak, and hear
+        the reply.
+      </p>
+      <ol class="pipeline" aria-label="Pipeline stages, in order">
+        {
+          target.stages.map(({ abbr, name }, i) => (
+            <li data-reveal style={`--reveal-delay: ${(0.12 + i * 0.1).toFixed(2)}s`}>
+              <span class="node" aria-hidden="true" />
+              <span class="abbr">{abbr}</span>
+              <span class="stage muted">{name}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="muted prose" data-reveal>
+        Four stages contending for one pool of unified memory, in a loop a
+        person can feel. It is exactly the kind of stack that only makes sense
+        measured whole — and none of it is measured yet.
+      </p>
+    </div>
+  </section>
+
+  <section class="section axes" aria-labelledby="axes-title">
+    <div class="container">
+      <span class="eyebrow" data-reveal>What we measure</span>
+      <h2 id="axes-title" data-reveal>Three axes, stated before any number exists</h2>
+      <ul class="axis-grid">
+        {
+          axes.map(({ name, sub, copy }, i) => (
+            <li data-reveal style={`--reveal-delay: ${i * 0.12}s`}>
+              <div class="card axis">
+                <h3>{name}</h3>
+                <p class="axis-sub">{sub}</p>
+                <p class="muted">{copy}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section repro" aria-labelledby="repro-title">
+    <div class="container prose">
+      <span class="eyebrow" data-reveal>Reproducible by design</span>
+      <h2 id="repro-title" data-reveal>Every run will ship its recipe</h2>
+      <p data-reveal>
+        Every published run will come with the Docker recipe that reproduces
+        it — the exact containers, models, and flags, building on the <a
+          href="https://github.com/dusty-nv/jetson-containers"
+        >jetson-containers</a> family. Own the device, rerun the arena: a
+        result you cannot reproduce is a result you should not trust.
+      </p>
+    </div>
+  </section>
+
+  <section class="section arena-teaser" aria-label="The arena">
+    <div class="container">
+      <a class="card arena-cta" href="/arena/" data-reveal>
+        <h2>The arena</h2>
+        <p class="muted">
+          Where published runs will land — one device, one stack, one recipe at
+          a time.
+        </p>
+        <span class="go" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    padding-top: clamp(4rem, 10vh, 8rem);
+  }
+
+  .hero-copy {
+    text-align: center;
+    max-width: 46rem;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(3rem, 8.5vw, 5.75rem);
+    margin-bottom: 0.35em;
+  }
+
+  .tagline {
+    font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-inline: auto;
+    max-width: 34em;
+  }
+
+  /* the hook: the canonical first target, named above the fold */
+  .target-chip {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    column-gap: 0.7rem;
+    row-gap: 0.15rem;
+    margin-top: 1.5rem;
+    padding: 0.6rem 1.3rem;
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    border-radius: 1.2rem;
+    box-shadow: var(--shadow);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .chip-label {
+    font-size: 0.72rem;
+    font-weight: 640;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .chip-device {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .chip-chain {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+  }
+
+  .hero-scene {
+    position: relative;
+    max-width: 76rem;
+    margin: clamp(1.5rem, 5vh, 3.5rem) auto 0;
+    padding-inline: 1rem;
+  }
+
+  /* the sun just under the horizon — home carries the dawn itself.
+     A wide, shallow band hugging the horizon line, not a ball. */
+  .hero-scene::before,
+  .hero-scene::after {
+    content: "";
+    position: absolute;
+    inset: -18% -12% -55%;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .hero-scene::before {
+    background: radial-gradient(
+      74% 38% at 50% 60%,
+      var(--sky-horizon),
+      transparent 70%
+    );
+  }
+
+  .hero-scene::after {
+    background: radial-gradient(
+      52% 28% at 50% 61%,
+      var(--sky-glow),
+      transparent 68%
+    );
+    opacity: 0.55;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-scene::after {
+      animation: glow-breathe 12s var(--ease-gentle) infinite alternate;
+    }
+
+    @keyframes glow-breathe {
+      from {
+        opacity: 0.35;
+        transform: scale(1);
+      }
+
+      to {
+        opacity: 0.8;
+        transform: scale(1.04);
+      }
+    }
+  }
+
+  .horizon {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--line) 18%,
+      var(--line) 82%,
+      transparent
+    );
+  }
+
+  /* a single node descending its thread, inviting the scroll */
+  .scroll-hint {
+    position: relative;
+    width: 1px;
+    height: 3rem;
+    margin: 2.2rem auto 0;
+  }
+
+  .hint-thread {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, var(--line), transparent);
+  }
+
+  .hint-node {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    transform: translateX(-50%);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hint-node {
+      animation: hint-drift 3s var(--ease-gentle) infinite alternate;
+    }
+
+    @keyframes hint-drift {
+      from {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+
+      to {
+        transform: translateX(-50%) translateY(1.6rem);
+        opacity: 0.35;
+      }
+    }
+  }
+
+  /* the pipeline: stages as nodes on a thread — the mesh vocabulary,
+     laid out in line. Static, like the threads in the hero scene. */
+  .target {
+    padding-top: 0;
+  }
+
+  .pipeline {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 1rem;
+    margin: 2rem 0 1.8rem;
+  }
+
+  .pipeline li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .pipeline li:not(:last-child)::after {
+    content: "";
+    width: clamp(1.4rem, 4vw, 3.2rem);
+    height: 1px;
+    background: var(--mesh-thread);
+    margin-inline: 1rem;
+  }
+
+  .pipeline .node {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--mesh-node);
+    flex: none;
+  }
+
+  .pipeline .abbr {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+  }
+
+  .pipeline .stage {
+    font-size: 0.9rem;
+  }
+
+  .axes {
+    padding-top: 0;
+  }
+
+  .axis-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+    gap: 1.4rem;
+    margin-top: 2.2rem;
+  }
+
+  .axis {
+    height: 100%;
+  }
+
+  .axis h3 {
+    font-size: 1.45rem;
+    margin-bottom: 0.15em;
+  }
+
+  .axis-sub {
+    font-size: 0.78rem;
+    font-weight: 640;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .axis p:last-child {
+    font-size: 0.97rem;
+    line-height: 1.6;
+  }
+
+  .repro {
+    padding-top: 0;
+  }
+
+  .arena-teaser {
+    padding-top: 0;
+  }
+
+  .arena-cta {
+    position: relative;
+    padding-bottom: 3.2rem;
+  }
+
+  .arena-cta h2 {
+    font-size: 1.45rem;
+    margin-bottom: 0.4em;
+  }
+
+  .arena-cta p {
+    font-size: 0.97rem;
+    line-height: 1.6;
+    max-width: 42rem;
+  }
+
+  .arena-cta .go {
+    position: absolute;
+    left: 2rem;
+    bottom: 1.6rem;
+    color: var(--accent);
+    font-size: 1.15rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .arena-cta .go {
+      transition: transform 0.35s var(--ease-out);
+    }
+
+    .arena-cta:hover .go {
+      transform: translateX(6px);
+    }
+  }
+</style>
