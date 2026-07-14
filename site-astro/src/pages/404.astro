@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
+import site from "../data/site";
+
+// A real static 404: Cloudflare Pages only returns HTTP 404 for unmatched
+// routes when dist/404.html exists — without it, unknown paths fall back to
+// the homepage with a 200, which lies to crawlers and to the go-live check.
+const title = "Page not found";
+const description = "This page does not exist. The arena is at /arena/.";
+---
+
+<Layout title={`${title} · ${site.name}`} description={description}>
+  <PageHero title={title} intro={["There is nothing at this address."]} />
+  <section class="notfound">
+    <p>
+      The pages that exist today: the <a href="/">home page</a> and the
+      <a href="/arena/">arena</a>. If a link brought you here, it is worth
+      reporting on
+      <a href="https://github.com/agentculture/jetson-arena">GitHub</a>.
+    </p>
+  </section>
+</Layout>
+
+<style>
+  .notfound {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 0 var(--space-gutter, 1.5rem) 6rem;
+  }
+</style>
