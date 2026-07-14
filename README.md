@@ -1,9 +1,6 @@
-# culture-agent-template
+# jetson-arena
 
-Template repository for creating Culture agents with a consistent structure,
-lifecycle, skills, and operating contract. Clone it, rename the package, edit
-`culture.yaml`, and you have a new [AgentCulture](https://github.com/agentculture)
-mesh agent that `steward doctor` recognizes.
+Agent and CLI for the Jetson Arena: how a given Jetson device handles a whole model stack. Benchmarks pipelines (e.g. realtime VAD + STT + LLM + TTS on an Orin Nano Super 8GB) for latency, memory signature and quality, then publishes results plus signed-in Docker build recipes. Also maintains the arena public site.
 
 ## What you get
 
@@ -22,8 +19,8 @@ mesh agent that `steward doctor` recognizes.
 ```bash
 uv sync
 uv run pytest -n auto                 # run the test suite
-uv run culture-agent-template whoami  # identity from culture.yaml
-uv run culture-agent-template learn   # self-teaching prompt (add --json)
+uv run jetson-arena whoami  # identity from culture.yaml
+uv run jetson-arena learn   # self-teaching prompt (add --json)
 uv run teken cli doctor . --strict    # the agent-first rubric gate CI runs
 ```
 
@@ -44,7 +41,7 @@ error, `3+` reserved.
 
 ## Make it your own
 
-1. Rename the package `culture_agent_template/` and the `culture-agent-template`
+1. Rename the package `jetson_arena/` and the `jetson-arena`
    CLI/dist name throughout `pyproject.toml`, the package, `tests/`,
    `sonar-project.properties`, and this `README.md`. The name is hard-coded in
    ~100 places, so list every occurrence first — see the `git grep` discovery
