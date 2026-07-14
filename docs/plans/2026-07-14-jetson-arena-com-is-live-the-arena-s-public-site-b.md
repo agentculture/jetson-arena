@@ -8,7 +8,7 @@ slug: `jetson-arena-com-is-live-the-arena-s-public-site-b` · status: `exported`
 
 ### t1 — Verify the pre-wiring state and start the hosting runbook
 
-- instruction: Run: cultureflare whoami; cultureflare zones list; curl -sI https://jetson-arena.com. Paste each command + verbatim output into a new docs/hosting-runbook.md with a short preamble saying what the runbook is. Expect the zone present and the apex unserved (parking/522/NXDOMAIN all fine — record what it actually says). Requires CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID in the environment; if missing, stop and report rather than fake output
+- instruction: Run: cultureflare whoami; cultureflare zones list; curl -sI <https://jetson-arena.com>. Paste each command + verbatim output into a new docs/hosting-runbook.md with a short preamble saying what the runbook is. Expect the zone present and the apex unserved (parking/522/NXDOMAIN all fine — record what it actually says). Requires CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID in the environment; if missing, stop and report rather than fake output
 - covers: c3, h9
 - acceptance:
   - docs/hosting-runbook.md exists and records: cultureflare whoami output (token valid), zones list output showing jetson-arena.com, and a curl against the apex showing nothing served yet
@@ -16,12 +16,12 @@ slug: `jetson-arena-com-is-live-the-arena-s-public-site-b` · status: `exported`
 
 ### t2 — Scaffold site-astro/ citing org/site-astro at a pinned commit, with provenance
 
-- instruction: Pin the org commit: git -C /home/spark/git/org rev-parse HEAD. Copy from /home/spark/git/org/site-astro: src/styles/global.css, src/layouts/Layout.astro, src/components/{Header,Footer,HeroMesh,Mark,PageHero}.astro, src/data/{site.ts,types.ts}, plus package.json/tsconfig.json adapted for this repo. Copy verbatim — rebranding is t3's job. Author astro.config.mjs with exactly site: 'https://jetson-arena.com' and output: 'static'. npm install && npm run build must exit 0. Write docs/site-sources.md listing every copied file with the pinned org commit hash, modeled on docs/skill-sources.md
+- instruction: Pin the org commit: git -C /home/spark/git/org rev-parse HEAD. Copy from /home/spark/git/org/site-astro: src/styles/global.css, src/layouts/Layout.astro, src/components/{Header,Footer,HeroMesh,Mark,PageHero}.astro, src/data/{site.ts,types.ts}, plus package.json/tsconfig.json adapted for this repo. Copy verbatim — rebranding is t3's job. Author astro.config.mjs with exactly site: '<https://jetson-arena.com>' and output: 'static'. npm install && npm run build must exit 0. Write docs/site-sources.md listing every copied file with the pinned org commit hash, modeled on docs/skill-sources.md
 - covers: c7, h2, c8, h3
 - acceptance:
   - site-astro/ contains global.css, Layout.astro, Header/Footer/HeroMesh/Mark/PageHero, and the data/site.ts + types.ts pattern copied from org/site-astro; npm run build exits 0
   - docs/site-sources.md lists every copied file with the org commit hash it came from
-  - astro.config.mjs contains exactly site: 'https://jetson-arena.com' and output: 'static' — no base, no adapter; internal links in dist/ resolve at the root
+  - astro.config.mjs contains exactly site: '<https://jetson-arena.com>' and output: 'static' — no base, no adapter; internal links in dist/ resolve at the root
 
 ### t3 — Rebrand and build the homepage: worked example as the hook, nav owned here
 
@@ -61,7 +61,7 @@ slug: `jetson-arena-com-is-live-the-arena-s-public-site-b` · status: `exported`
 
 ### t7 — Cloudflare wiring: Pages project, custom domains, DNS — recorded in the runbook
 
-- instruction: All commands + verbatim output append to docs/hosting-runbook.md. Steps: (1) wrangler pages project create jetson-arena --production-branch main; (2) attach both custom domains via curl POST accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/jetson-arena/domains for jetson-arena.com and www.jetson-arena.com; (3) cultureflare dns create for apex and www CNAMEs to jetson-arena.pages.dev — dry-run first, read the plan, then --apply. Decide www: serve or 301 (risk r2) and record the decision. Nothing via dashboard; every step scripted and reproducible
+- instruction: All commands + verbatim output append to docs/hosting-runbook.md. Steps: (1) wrangler pages project create jetson-arena --production-branch main; (2) attach both custom domains via curl POST accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/jetson-arena/domains for jetson-arena.com and <www.jetson-arena.com>; (3) cultureflare dns create for apex and www CNAMEs to jetson-arena.pages.dev — dry-run first, read the plan, then --apply. Decide www: serve or 301 (risk r2) and record the decision. Nothing via dashboard; every step scripted and reproducible
 - depends on: t1
 - covers: c11, h6
 - acceptance:
@@ -79,11 +79,11 @@ slug: `jetson-arena-com-is-live-the-arena-s-public-site-b` · status: `exported`
 
 ### t9 — Go-live verification: deploy is live, static, and recorded
 
-- instruction: Post-merge, after the deploy workflow succeeds: curl -sI https://jetson-arena.com and https://www.jetson-arena.com (expect 200 + text/html); curl a nonexistent path (expect the static 404 page, not a function response); spot-check view-source matches dist/. Re-run scripts/check-contrast.mjs against the shipped CSS. Append all outputs verbatim to docs/hosting-runbook.md in a follow-up commit. If any check fails, file it as a bug immediately — do not record success from memory
+- instruction: Post-merge, after the deploy workflow succeeds: curl -sI <https://jetson-arena.com> and <https://www.jetson-arena.com> (expect 200 + text/html); curl a nonexistent path (expect the static 404 page, not a function response); spot-check view-source matches dist/. Re-run scripts/check-contrast.mjs against the shipped CSS. Append all outputs verbatim to docs/hosting-runbook.md in a follow-up commit. If any check fails, file it as a bug immediately — do not record success from memory
 - depends on: t8
 - covers: c1, h7, h1, c12, h12
 - acceptance:
-  - after the merge-triggered deploy, curl -sI https://jetson-arena.com and https://www.jetson-arena.com both return 200 with the built HTML; output recorded in docs/hosting-runbook.md
+  - after the merge-triggered deploy, curl -sI <https://jetson-arena.com> and <https://www.jetson-arena.com> both return 200 with the built HTML; output recorded in docs/hosting-runbook.md
   - a nonexistent path serves the static 404 (no function); view-source shows the static dist/ content
   - the contrast/reduced-motion checks re-run against the shipped pages and their output is recorded — nothing marked done from memory
 

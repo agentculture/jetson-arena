@@ -1,7 +1,7 @@
 # jetson-arena.com is live: the arena's public site, built on Astro static with org's exact design system, deployed to Cloudflare Pages on the existing jetson-arena.com zone, wired via cultureflare
 
 > jetson-arena.com is live: the arena's public site, built on Astro static with org's exact design system, deployed to Cloudflare Pages on the existing jetson-arena.com zone, wired via cultureflare
-> instruction: Build site-astro/ by citing org/site-astro (styles, layout, components, data pattern), rebrand for jetson-arena, verify the build is pure-static, then wire hosting: cultureflare for DNS + deploy triggers, documented fallback for Pages project + custom domains, until https://jetson-arena.com and www serve the site
+> instruction: Build site-astro/ by citing org/site-astro (styles, layout, components, data pattern), rebrand for jetson-arena, verify the build is pure-static, then wire hosting: cultureflare for DNS + deploy triggers, documented fallback for Pages project + custom domains, until <https://jetson-arena.com> and www serve the site
 
 ## Audience
 
@@ -12,7 +12,7 @@
 
 - Before: The repo has no site: no site-astro/ directory, nothing served. The jetson-arena.com zone exists in the Cloudflare account (operator confirmed in issue #1) but points at nothing
   - instruction: Before wiring, verify the starting state: cultureflare zones list shows jetson-arena.com; curl against the apex confirms nothing is served yet
-- After: https://jetson-arena.com (apex and www) serves a pure-static Astro build at the domain root: a homepage that leads with the Orin Nano Super 8GB voice-loop worked example as the arena's canonical first target, an arena page in an honest empty state (no runs yet), and org's look and feel throughout
+- After: <https://jetson-arena.com> (apex and www) serves a pure-static Astro build at the domain root: a homepage that leads with the Orin Nano Super 8GB voice-loop worked example as the arena's canonical first target, an arena page in an honest empty state (no runs yet), and org's look and feel throughout
   - instruction: Build site-astro/ with pages for home and arena (empty state), styled from the org copy; astro build must emit a pure-static dist/ served at the domain root
 
 ## Why it matters
@@ -25,8 +25,8 @@
 - Style is cited from org/site-astro (cite-don't-import): copy global.css, Layout.astro, Header/Footer/HeroMesh/Mark/PageHero, and the data/site.ts + types.ts pattern into site-astro/ here, then own the copy and rebrand for jetson-arena
   - instruction: Copy global.css, Layout.astro, Header/Footer/HeroMesh/Mark/PageHero and the data/site.ts + types.ts pattern from org/site-astro at a pinned commit into site-astro/; record file-by-file provenance (org commit hash) in a docs note; then rebrand
   - honesty: Every copied file is listed with its org commit of origin in a provenance note (mirroring docs/skill-sources.md practice), so the divergence from org is auditable rather than silent
-- astro.config.mjs pins site: 'https://jetson-arena.com', output: 'static', and no base prefix — jetson-arena owns its domain root (issue #1 contrasts this with learn-cli's /learn prefix)
-  - instruction: Author astro.config.mjs with exactly site: 'https://jetson-arena.com' and output: 'static'; run astro build and spot-check that internal links in dist/ resolve at the root
+- astro.config.mjs pins site: '<https://jetson-arena.com>', output: 'static', and no base prefix — jetson-arena owns its domain root (issue #1 contrasts this with learn-cli's /learn prefix)
+  - instruction: Author astro.config.mjs with exactly site: '<https://jetson-arena.com>' and output: 'static'; run astro build and spot-check that internal links in dist/ resolve at the root
   - honesty: astro.config.mjs contains exactly site + output:'static' and no base/adapter keys; internal links resolve at the domain root in the built dist/
 - The two contracts in org's design system survive the copy: every text/background pair stays WCAG AA >= 4.5:1 in both themes, and the prefers-reduced-motion kill switch keeps disabling all animation site-wide
   - instruction: After any palette change, re-measure every text/background pair in both themes (>= 4.5:1) and smoke-check prefers-reduced-motion disables all animation
@@ -50,7 +50,7 @@
 
 ## Success signals
 
-- curl -sI https://jetson-arena.com and https://www.jetson-arena.com return the built site; npm run build in site-astro/ exits 0 with a static dist/ and no adapter; the copied pages pass the same contrast/reduced-motion contract org verifies
+- curl -sI <https://jetson-arena.com> and <https://www.jetson-arena.com> return the built site; npm run build in site-astro/ exits 0 with a static dist/ and no adapter; the copied pages pass the same contrast/reduced-motion contract org verifies
   - instruction: After deploy, run the checks and record output in the runbook: curl -sI both hostnames (expect 200 + HTML), confirm dist/ is static-only, re-run the contrast/reduced-motion checks on the shipped pages
 
 ## Scope / boundaries
