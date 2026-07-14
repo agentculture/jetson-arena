@@ -1,0 +1,304 @@
+{
+  "slug": "jetson-arena-com-is-live-the-arena-s-public-site-b",
+  "title": "jetson-arena.com is live: the arena's public site, built on Astro static with org's exact design system, deployed to Cloudflare Pages on the existing jetson-arena.com zone, wired via cultureflare",
+  "schema_version": 2,
+  "status": "exported",
+  "created": "2026-07-14T05:07:26Z",
+  "updated": "2026-07-14T05:16:41Z",
+  "claims": [
+    {
+      "id": "c1",
+      "kind": "announcement",
+      "text": "jetson-arena.com is live: the arena's public site, built on Astro static with org's exact design system, deployed to Cloudflare Pages on the existing jetson-arena.com zone, wired via cultureflare",
+      "origin": "user",
+      "status": "confirmed",
+      "honesty_conditions": [
+        {
+          "id": "h7",
+          "text": "Live check passes end to end: both hostnames serve the Astro build over HTTPS, the styling is recognizably org's system, and the deploy is reproducible from a clean checkout by following the repo's own docs",
+          "status": "confirmed",
+          "instruction": ""
+        }
+      ],
+      "hard_questions": [],
+      "links": [],
+      "instruction": "Build site-astro/ by citing org/site-astro (styles, layout, components, data pattern), rebrand for jetson-arena, verify the build is pure-static, then wire hosting: cultureflare for DNS + deploy triggers, documented fallback for Pages project + custom domains, until https://jetson-arena.com and www serve the site"
+    },
+    {
+      "id": "c2",
+      "kind": "audience",
+      "text": "Visitors evaluating Jetson model stacks (humans and agents reading the arena), plus the operator who deploys and maintains the site",
+      "origin": "llm",
+      "status": "confirmed",
+      "honesty_conditions": [
+        {
+          "id": "h8",
+          "text": "The homepage answers 'what is this and what will I find here' on its own \u2014 a visitor never needs issue #1 or mesh context to get it",
+          "status": "confirmed",
+          "instruction": ""
+        }
+      ],
+      "hard_questions": [],
+      "links": [],
+      "instruction": "Write the homepage for stack-evaluators: lead with the worked example, plain answer to 'what is this' above the fold; nav labels legible to humans and agents alike"
+    },
+    {
+      "id": "c3",
+      "kind": "before_state",
+      "text": "The repo has no site: no site-astro/ directory, nothing served. The jetson-arena.com zone exists in the Cloudflare account (operator confirmed in issue #1) but points at nothing",
+      "origin": "llm",
+      "status": "confirmed",
+      "honesty_conditions": [
+        {
+          "id": "h9",
+          "text": "The pre-wiring state is verified, not assumed \u2014 zone listed, apex not serving, both recorded in the runbook",
+          "status": "confirmed",
+          "instruction": ""
+        }
+      ],
+      "hard_questions": [],
+      "links": [],
+      "instruction": "Before wiring, verify the starting state: cultureflare zones list shows jetson-arena.com; curl against the apex confirms nothing is served yet"
+    },
+    {
+      "id": "c4",
+      "kind": "after_state",
+      "text": "https://jetson-arena.com (apex and www) serves a pure-static Astro build at the domain root: a homepage that leads with the Orin Nano Super 8GB voice-loop worked example as the arena's canonical first target, an arena page in an honest empty state (no runs yet), and org's look and feel throughout",
+      "origin": "llm",
+      "status": "confirmed",
+      "honesty_conditions": [
+        {
+          "id": "h1",
+          "text": "The deployed site is byte-for-byte the static dist/ of astro build \u2014 view-source shows no SSR, and hitting a nonexistent path serves the static 404, not a function",
+          "status": "confirmed",
+          "instruction": ""
+        }
+      ],
+      "hard_questions": [],
+      "links": [],
+      "instruction": "Build site-astro/ with pages for home and arena (empty state), styled from the org copy; astro build must emit a pure-static dist/ served at the domain root"
+    },
+    {
+      "id": "c5",
+      "kind": "why_it_matters",
+      "text": "The site is the arena's public face; shipping the skeleton first gives later run records a place to land and makes the project visible before the benchmark harness exists \u2014 issue #1's own build order (site skeleton before arena view, worker, CLI)",
+      "origin": "llm",
+      "status": "confirmed",
+      "honesty_conditions": [
+        {
+          "id": "h10",
+          "text": "The empty arena page says explicitly that no runs are published yet \u2014 the site's visibility never gets ahead of its data",
+          "status": "confirmed",
+          "instruction": ""
+        }
+      ],
+      "hard_questions": [],
+      "links": [],
+      "instruction": "Keep the leg scoped to the skeleton so it ships before the benchmark harness exists; the arena page's empty state states plainly that run records land later"
+    },
+    {
+      "id": "c6",
+      "kind": "boundary",
+      "text": "Site skeleton + hosting only. No GitHub OAuth, no consent/terms machinery, no arena-api Worker, no run data or benchmark harness, no gated reproduce path \u2014 those are the follow-up legs of issue #1. No SSR adapter, ever: dynamic behavior belongs to the future Worker",
+      "origin": "llm",
+      "status": "confirmed",
+      "honesty_conditions": [
+        {
+          "id": "h11",
+          "text": "The leg's PR diff contains no auth, consent, Worker, SSR, or run-data code \u2014 verified by reading the diff, not by intent",
+          "status": "confirmed",
+          "instruction": ""
+        }
+      ],
+      "hard_questions": [],
+      "links": [],
+      "instruction": "Enforce the boundary at review time: reject any diff in this leg adding OAuth, consent, Worker, SSR adapter, or run-schema code; astro.config.mjs carries no adapter"
+    },
+    {
+      "id": "c7",
+      "kind": "requirement",
+      "text": "Style is cited from org/site-astro (cite-don't-import): copy global.css, Layout.astro, Header/Footer/HeroMesh/Mark/PageHero, and the data/site.ts + types.ts pattern into site-astro/ here, then own the copy and rebrand for jetson-arena",
+      "origin": "llm",
+      "status": "confirmed",
+      "honesty_conditions": [
+        {
+          "id": "h2",
+          "text": "Every copied file is listed with its org commit of origin in a provenance note (mirroring docs/skill-sources.md practice), so the divergence from org is auditable rather than silent",
+          "status": "confirmed",
+          "instruction": ""
+        }
+      ],
+      "hard_questions": [],
+      "links": [],
+      "instruction": "Copy global.css, Layout.astro, Header/Footer/HeroMesh/Mark/PageHero and the data/site.ts + types.ts pattern from org/site-astro at a pinned commit into site-astro/; record file-by-file provenance (org commit hash) in a docs note; then rebrand"
+    },
+    {
+      "id": "c8",
+      "kind": "requirement",
+      "text": "astro.config.mjs pins site: 'https://jetson-arena.com', output: 'static', and no base prefix \u2014 jetson-arena owns its domain root (issue #1 contrasts this with learn-cli's /learn prefix)",
+      "origin": "llm",
+      "status": "confirmed",
+      "honesty_conditions": [
+        {
+          "id": "h3",
+          "text": "astro.config.mjs contains exactly site + output:'static' and no base/adapter keys; internal links resolve at the domain root in the built dist/",
+          "status": "confirmed",
+          "instruction": ""
+        }
+      ],
+      "hard_questions": [],
+      "links": [],
+      "instruction": "Author astro.config.mjs with exactly site: 'https://jetson-arena.com' and output: 'static'; run astro build and spot-check that internal links in dist/ resolve at the root"
+    },
+    {
+      "id": "c9",
+      "kind": "requirement",
+      "text": "The two contracts in org's design system survive the copy: every text/background pair stays WCAG AA >= 4.5:1 in both themes, and the prefers-reduced-motion kill switch keeps disabling all animation site-wide",
+      "origin": "llm",
+      "status": "confirmed",
+      "honesty_conditions": [
+        {
+          "id": "h4",
+          "text": "Contrast is re-verified on the rebranded palette (not assumed from org) \u2014 every text/background pair measured >= 4.5:1 in both themes after any color change, and a reduced-motion check shows zero animation",
+          "status": "confirmed",
+          "instruction": ""
+        }
+      ],
+      "hard_questions": [],
+      "links": [],
+      "instruction": "After any palette change, re-measure every text/background pair in both themes (>= 4.5:1) and smoke-check prefers-reduced-motion disables all animation"
+    },
+    {
+      "id": "c10",
+      "kind": "requirement",
+      "text": "No fabricated numbers anywhere: the worked example on the homepage is presented as the arena's first target ('what we will measure'), never as results. An honest empty state beats a fake row \u2014 the arena's credibility is the whole asset (issue #1 section 1)",
+      "origin": "llm",
+      "status": "confirmed",
+      "honesty_conditions": [
+        {
+          "id": "h5",
+          "text": "grep the built dist/ for latency/memory/quality figures: any number shown traces to a real measurement artifact in the repo, or the page says 'not yet measured' in so many words",
+          "status": "confirmed",
+          "instruction": ""
+        }
+      ],
+      "hard_questions": [],
+      "links": [],
+      "instruction": "Before every deploy, grep dist/ for latency/memory/quality figures; each hit must trace to a real measurement artifact in the repo or the copy is reworded to 'not yet measured'"
+    },
+    {
+      "id": "c11",
+      "kind": "requirement",
+      "text": "Cloudflare wiring goes through cultureflare wherever it has verbs \u2014 whoami to verify the token, zones list to confirm the zone, dns create for apex + www, pages deployments create for build triggers \u2014 always dry-run first, --apply to commit",
+      "origin": "llm",
+      "status": "confirmed",
+      "honesty_conditions": [
+        {
+          "id": "h6",
+          "text": "Every cultureflare mutation appears twice in the session log: once as a dry-run whose plan was read, once with --apply \u2014 and steps cultureflare cannot do are done via a documented fallback, not silently in the dashboard",
+          "status": "confirmed",
+          "instruction": ""
+        }
+      ],
+      "hard_questions": [
+        {
+          "id": "q1",
+          "text": "cultureflare's Python CLI has no verb for Pages project creation or custom-domain attach (README scope table: 'bash skills only'). What is the sanctioned path for those two steps \u2014 wrangler, direct API calls, or the Cloudflare dashboard as a documented operator step?",
+          "resolved": false,
+          "blocking": false
+        }
+      ],
+      "links": [],
+      "instruction": "Start with cultureflare whoami + zones list; run every dns create as dry-run, read the plan, then --apply; record each command and its output in the hosting runbook"
+    },
+    {
+      "id": "c12",
+      "kind": "success_signal",
+      "text": "curl -sI https://jetson-arena.com and https://www.jetson-arena.com return the built site; npm run build in site-astro/ exits 0 with a static dist/ and no adapter; the copied pages pass the same contrast/reduced-motion contract org verifies",
+      "origin": "llm",
+      "status": "confirmed",
+      "honesty_conditions": [
+        {
+          "id": "h12",
+          "text": "The success checks are executed and their output recorded after the real deploy \u2014 never marked done from memory",
+          "status": "confirmed",
+          "instruction": ""
+        }
+      ],
+      "hard_questions": [],
+      "links": [],
+      "instruction": "After deploy, run the checks and record output in the runbook: curl -sI both hostnames (expect 200 + HTML), confirm dist/ is static-only, re-run the contrast/reduced-motion checks on the shipped pages"
+    },
+    {
+      "id": "c13",
+      "kind": "assumption",
+      "text": "The jetson-arena.com zone is present and active in the Cloudflare account the operator's CLOUDFLARE_API_TOKEN reaches, and the token has Pages + DNS write scopes",
+      "origin": "llm",
+      "status": "confirmed",
+      "honesty_conditions": [],
+      "hard_questions": [],
+      "links": [],
+      "instruction": ""
+    },
+    {
+      "id": "c14",
+      "kind": "decision",
+      "text": "USER DECISION: deploy via a GitHub Actions workflow \u2014 on merge to main, CI builds site-astro/ and runs wrangler pages deploy dist/ with CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID as repo secrets. Authored fresh for this repo (org's warning: no workflow template to copy). cultureflare's 'pages deployments create' build-trigger verb is not used in this model",
+      "origin": "user",
+      "status": "confirmed",
+      "honesty_conditions": [],
+      "hard_questions": [],
+      "links": [],
+      "instruction": ""
+    },
+    {
+      "id": "c15",
+      "kind": "decision",
+      "text": "USER DECISION: for the two steps cultureflare cannot do, use 'wrangler pages project create' for the Pages project and documented curl calls to the Pages custom-domains API for apex + www; both scripted/recorded in the repo's hosting runbook. File an upstream cultureflare issue to port these verbs",
+      "origin": "user",
+      "status": "confirmed",
+      "honesty_conditions": [],
+      "hard_questions": [],
+      "links": [],
+      "instruction": ""
+    },
+    {
+      "id": "c16",
+      "kind": "decision",
+      "text": "USER DECISION: the CLI 'site' noun group (site overview / site build, org's site.py pattern) is deferred to a follow-up PR \u2014 this leg ships site-astro/ and hosting only",
+      "origin": "user",
+      "status": "confirmed",
+      "honesty_conditions": [],
+      "hard_questions": [],
+      "links": [],
+      "instruction": ""
+    }
+  ],
+  "open_vagueness": [
+    {
+      "id": "v1",
+      "text": "Issue #1 section 3 in full \u2014 GitHub OAuth, consent/terms machinery (learn-cli's worker pattern), terms/privacy/consent pages, and the gated reproduce path. Next leg after the skeleton is live",
+      "kind": "follow_up",
+      "claim_id": null
+    },
+    {
+      "id": "v2",
+      "text": "Arena data pages driven by real run records (the section-1 run schema, compare views, detail pages). Blocked on the benchmark harness existing; the skeleton ships an honest empty state instead",
+      "kind": "follow_up",
+      "claim_id": null
+    },
+    {
+      "id": "v3",
+      "text": "Exact v1 page set beyond home + arena empty state (an about/how-it-works page? a stacks explainer?) \u2014 decidable during implementation without changing the frame",
+      "kind": "unknown_nonblocking",
+      "claim_id": null
+    },
+    {
+      "id": "v4",
+      "text": "Upstream cultureflare gap: port 'pages project create' and Pages custom-domain attach into the Python CLI (today: bash only). File the issue on agentculture/cultureflare after this leg ships",
+      "kind": "follow_up",
+      "claim_id": null
+    }
+  ],
+  "scope_entries": []
+}
