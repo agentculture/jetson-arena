@@ -1,0 +1,324 @@
+{
+  "slug": "jetson-arena-com-is-live-the-arena-s-public-site-b",
+  "title": "jetson-arena.com is live: the arena's public site, built on Astro static with org's exact design system, deployed to Cloudflare Pages on the existing jetson-arena.com zone, wired via cultureflare",
+  "frame_slug": "jetson-arena-com-is-live-the-arena-s-public-site-b",
+  "schema_version": 2,
+  "status": "exported",
+  "created": "2026-07-14T05:17:45Z",
+  "updated": "2026-07-14T05:33:23Z",
+  "targets": [
+    {
+      "id": "c1",
+      "kind": "announcement",
+      "text": "jetson-arena.com is live: the arena's public site, built on Astro static with org's exact design system, deployed to Cloudflare Pages on the existing jetson-arena.com zone, wired via cultureflare"
+    },
+    {
+      "id": "h7",
+      "kind": "honesty",
+      "text": "Live check passes end to end: both hostnames serve the Astro build over HTTPS, the styling is recognizably org's system, and the deploy is reproducible from a clean checkout by following the repo's own docs"
+    },
+    {
+      "id": "c2",
+      "kind": "audience",
+      "text": "Visitors evaluating Jetson model stacks (humans and agents reading the arena), plus the operator who deploys and maintains the site"
+    },
+    {
+      "id": "h8",
+      "kind": "honesty",
+      "text": "The homepage answers 'what is this and what will I find here' on its own \u2014 a visitor never needs issue #1 or mesh context to get it"
+    },
+    {
+      "id": "c3",
+      "kind": "before_state",
+      "text": "The repo has no site: no site-astro/ directory, nothing served. The jetson-arena.com zone exists in the Cloudflare account (operator confirmed in issue #1) but points at nothing"
+    },
+    {
+      "id": "h9",
+      "kind": "honesty",
+      "text": "The pre-wiring state is verified, not assumed \u2014 zone listed, apex not serving, both recorded in the runbook"
+    },
+    {
+      "id": "c4",
+      "kind": "after_state",
+      "text": "https://jetson-arena.com (apex and www) serves a pure-static Astro build at the domain root: a homepage that leads with the Orin Nano Super 8GB voice-loop worked example as the arena's canonical first target, an arena page in an honest empty state (no runs yet), and org's look and feel throughout"
+    },
+    {
+      "id": "h1",
+      "kind": "honesty",
+      "text": "The deployed site is byte-for-byte the static dist/ of astro build \u2014 view-source shows no SSR, and hitting a nonexistent path serves the static 404, not a function"
+    },
+    {
+      "id": "c5",
+      "kind": "why_it_matters",
+      "text": "The site is the arena's public face; shipping the skeleton first gives later run records a place to land and makes the project visible before the benchmark harness exists \u2014 issue #1's own build order (site skeleton before arena view, worker, CLI)"
+    },
+    {
+      "id": "h10",
+      "kind": "honesty",
+      "text": "The empty arena page says explicitly that no runs are published yet \u2014 the site's visibility never gets ahead of its data"
+    },
+    {
+      "id": "c6",
+      "kind": "boundary",
+      "text": "Site skeleton + hosting only. No GitHub OAuth, no consent/terms machinery, no arena-api Worker, no run data or benchmark harness, no gated reproduce path \u2014 those are the follow-up legs of issue #1. No SSR adapter, ever: dynamic behavior belongs to the future Worker"
+    },
+    {
+      "id": "h11",
+      "kind": "honesty",
+      "text": "The leg's PR diff contains no auth, consent, Worker, SSR, or run-data code \u2014 verified by reading the diff, not by intent"
+    },
+    {
+      "id": "c7",
+      "kind": "requirement",
+      "text": "Style is cited from org/site-astro (cite-don't-import): copy global.css, Layout.astro, Header/Footer/HeroMesh/Mark/PageHero, and the data/site.ts + types.ts pattern into site-astro/ here, then own the copy and rebrand for jetson-arena"
+    },
+    {
+      "id": "h2",
+      "kind": "honesty",
+      "text": "Every copied file is listed with its org commit of origin in a provenance note (mirroring docs/skill-sources.md practice), so the divergence from org is auditable rather than silent"
+    },
+    {
+      "id": "c8",
+      "kind": "requirement",
+      "text": "astro.config.mjs pins site: 'https://jetson-arena.com', output: 'static', and no base prefix \u2014 jetson-arena owns its domain root (issue #1 contrasts this with learn-cli's /learn prefix)"
+    },
+    {
+      "id": "h3",
+      "kind": "honesty",
+      "text": "astro.config.mjs contains exactly site + output:'static' and no base/adapter keys; internal links resolve at the domain root in the built dist/"
+    },
+    {
+      "id": "c9",
+      "kind": "requirement",
+      "text": "The two contracts in org's design system survive the copy: every text/background pair stays WCAG AA >= 4.5:1 in both themes, and the prefers-reduced-motion kill switch keeps disabling all animation site-wide"
+    },
+    {
+      "id": "h4",
+      "kind": "honesty",
+      "text": "Contrast is re-verified on the rebranded palette (not assumed from org) \u2014 every text/background pair measured >= 4.5:1 in both themes after any color change, and a reduced-motion check shows zero animation"
+    },
+    {
+      "id": "c10",
+      "kind": "requirement",
+      "text": "No fabricated numbers anywhere: the worked example on the homepage is presented as the arena's first target ('what we will measure'), never as results. An honest empty state beats a fake row \u2014 the arena's credibility is the whole asset (issue #1 section 1)"
+    },
+    {
+      "id": "h5",
+      "kind": "honesty",
+      "text": "grep the built dist/ for latency/memory/quality figures: any number shown traces to a real measurement artifact in the repo, or the page says 'not yet measured' in so many words"
+    },
+    {
+      "id": "c11",
+      "kind": "requirement",
+      "text": "Cloudflare wiring goes through cultureflare wherever it has verbs \u2014 whoami to verify the token, zones list to confirm the zone, dns create for apex + www, pages deployments create for build triggers \u2014 always dry-run first, --apply to commit"
+    },
+    {
+      "id": "h6",
+      "kind": "honesty",
+      "text": "Every cultureflare mutation appears twice in the session log: once as a dry-run whose plan was read, once with --apply \u2014 and steps cultureflare cannot do are done via a documented fallback, not silently in the dashboard"
+    },
+    {
+      "id": "c12",
+      "kind": "success_signal",
+      "text": "curl -sI https://jetson-arena.com and https://www.jetson-arena.com return the built site; npm run build in site-astro/ exits 0 with a static dist/ and no adapter; the copied pages pass the same contrast/reduced-motion contract org verifies"
+    },
+    {
+      "id": "h12",
+      "kind": "honesty",
+      "text": "The success checks are executed and their output recorded after the real deploy \u2014 never marked done from memory"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t1",
+      "summary": "Verify the pre-wiring state and start the hosting runbook",
+      "origin": "llm",
+      "status": "confirmed",
+      "acceptance_criteria": [
+        "docs/hosting-runbook.md exists and records: cultureflare whoami output (token valid), zones list output showing jetson-arena.com, and a curl against the apex showing nothing served yet",
+        "every recorded command appears with its actual output, not a paraphrase"
+      ],
+      "deps": [],
+      "covers": [
+        "c3",
+        "h9"
+      ],
+      "instruction": "Run: cultureflare whoami; cultureflare zones list; curl -sI https://jetson-arena.com. Paste each command + verbatim output into a new docs/hosting-runbook.md with a short preamble saying what the runbook is. Expect the zone present and the apex unserved (parking/522/NXDOMAIN all fine \u2014 record what it actually says). Requires CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID in the environment; if missing, stop and report rather than fake output"
+    },
+    {
+      "id": "t2",
+      "summary": "Scaffold site-astro/ citing org/site-astro at a pinned commit, with provenance",
+      "origin": "llm",
+      "status": "confirmed",
+      "acceptance_criteria": [
+        "site-astro/ contains global.css, Layout.astro, Header/Footer/HeroMesh/Mark/PageHero, and the data/site.ts + types.ts pattern copied from org/site-astro; npm run build exits 0",
+        "docs/site-sources.md lists every copied file with the org commit hash it came from",
+        "astro.config.mjs contains exactly site: 'https://jetson-arena.com' and output: 'static' \u2014 no base, no adapter; internal links in dist/ resolve at the root"
+      ],
+      "deps": [],
+      "covers": [
+        "c7",
+        "h2",
+        "c8",
+        "h3"
+      ],
+      "instruction": "Pin the org commit: git -C /home/spark/git/org rev-parse HEAD. Copy from /home/spark/git/org/site-astro: src/styles/global.css, src/layouts/Layout.astro, src/components/{Header,Footer,HeroMesh,Mark,PageHero}.astro, src/data/{site.ts,types.ts}, plus package.json/tsconfig.json adapted for this repo. Copy verbatim \u2014 rebranding is t3's job. Author astro.config.mjs with exactly site: 'https://jetson-arena.com' and output: 'static'. npm install && npm run build must exit 0. Write docs/site-sources.md listing every copied file with the pinned org commit hash, modeled on docs/skill-sources.md"
+    },
+    {
+      "id": "t3",
+      "summary": "Rebrand and build the homepage: worked example as the hook, nav owned here",
+      "origin": "llm",
+      "status": "confirmed",
+      "acceptance_criteria": [
+        "src/data/site.ts and the nav (Header) carry jetson-arena branding and the full nav including the arena entry \u2014 this task owns all shared-component edits so siblings stay file-disjoint",
+        "index.astro leads with the Orin Nano Super 8GB voice-loop (VAD -> STT -> LLM -> TTS) presented as the arena's first target, with an above-the-fold plain answer to 'what is this site'",
+        "no latency/memory/quality number appears anywhere on the page; the worked example reads as 'what we will measure', not results"
+      ],
+      "deps": [
+        "t2"
+      ],
+      "covers": [
+        "c2",
+        "h8",
+        "c10"
+      ],
+      "instruction": "Own every shared-file edit so t4 stays disjoint: rebrand src/data/site.ts (name, url, description, nav = home + arena), Header/Footer strings, and rewrite src/pages/index.astro. Above the fold: what jetson-arena is (the arena for whole model stacks on Jetson devices), then the hook \u2014 Orin Nano Super 8GB realtime voice loop VAD -> STT -> LLM -> TTS as the canonical first target, phrased as what will be measured (latency / memory signature / quality). Zero numeric results anywhere. Keep org's palette and motion system untouched; drop org-only pages (framework/engage/agents) from nav and delete their copied .astro files if t2 brought them"
+    },
+    {
+      "id": "t4",
+      "summary": "Arena page in an honest empty state",
+      "origin": "llm",
+      "status": "confirmed",
+      "acceptance_criteria": [
+        "src/pages/arena.astro exists and states in plain copy that no runs are published yet and that run records land here later",
+        "this task touches only src/pages/arena.astro (nav entry already owned by t3)"
+      ],
+      "deps": [
+        "t3"
+      ],
+      "covers": [
+        "c4",
+        "c5",
+        "h10"
+      ],
+      "instruction": "Create src/pages/arena.astro and touch nothing else (nav already links to it via t3). Use PageHero + the org visual language. Copy states plainly: no runs are published yet; a run = one (device x stack) measurement with latency, memory signature, and quality; run records land here when the benchmark harness ships. Link to the GitHub repo and issue #1 for the roadmap"
+    },
+    {
+      "id": "t5",
+      "summary": "Contrast and reduced-motion verification on the rebranded palette",
+      "origin": "llm",
+      "status": "confirmed",
+      "acceptance_criteria": [
+        "a repeatable check (script under site-astro/scripts/ or a recorded procedure in docs/site-sources.md) measures every text/background pair in both themes at >= 4.5:1 on the final palette",
+        "a prefers-reduced-motion smoke check shows zero animation site-wide; both results are recorded, not asserted"
+      ],
+      "deps": [
+        "t3",
+        "t4"
+      ],
+      "covers": [
+        "c9",
+        "h4"
+      ],
+      "instruction": "Write site-astro/scripts/check-contrast.mjs: parse the theme custom-property pairs out of src/styles/global.css (both light and dark blocks), compute WCAG contrast for every text/background pair used, fail below 4.5. Run it and record the output table in docs/site-sources.md. For reduced motion: verify the prefers-reduced-motion block in global.css still zeroes every animation/transition and record the check. If any pair fails, fix the token and re-run \u2014 the recorded result must be from the final palette"
+    },
+    {
+      "id": "t6",
+      "summary": "GitHub Actions deploy workflow: build site-astro/, wrangler pages deploy dist/",
+      "origin": "llm",
+      "status": "confirmed",
+      "acceptance_criteria": [
+        ".github/workflows/deploy-site.yml builds site-astro/ and runs wrangler pages deploy on push to main touching site-astro/**, using CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID repo secrets",
+        "the workflow is authored fresh (not templated from org, which deliberately has none) and touches no other workflow file"
+      ],
+      "deps": [
+        "t2"
+      ],
+      "covers": [],
+      "instruction": "Author .github/workflows/deploy-site.yml fresh: on push to main with paths site-astro/** (plus workflow_dispatch); steps: checkout, setup-node 22 with npm cache on site-astro/package-lock.json, npm ci, npm run build, then npx wrangler pages deploy dist --project-name jetson-arena using secrets.CLOUDFLARE_API_TOKEN and secrets.CLOUDFLARE_ACCOUNT_ID. Touch no existing workflow file. Note in the workflow comments that the Pages project is created by the t7 runbook, not by CI"
+    },
+    {
+      "id": "t7",
+      "summary": "Cloudflare wiring: Pages project, custom domains, DNS \u2014 recorded in the runbook",
+      "origin": "llm",
+      "status": "confirmed",
+      "acceptance_criteria": [
+        "wrangler pages project create output, the curl calls attaching jetson-arena.com + www as Pages custom domains, and cultureflare dns create for apex + www (dry-run first, then --apply) are all recorded verbatim in docs/hosting-runbook.md",
+        "no step is done silently in the dashboard; anything cultureflare cannot do appears as a documented scripted fallback"
+      ],
+      "deps": [
+        "t1"
+      ],
+      "covers": [
+        "c11",
+        "h6"
+      ],
+      "instruction": "All commands + verbatim output append to docs/hosting-runbook.md. Steps: (1) wrangler pages project create jetson-arena --production-branch main; (2) attach both custom domains via curl POST accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/jetson-arena/domains for jetson-arena.com and www.jetson-arena.com; (3) cultureflare dns create for apex and www CNAMEs to jetson-arena.pages.dev \u2014 dry-run first, read the plan, then --apply. Decide www: serve or 301 (risk r2) and record the decision. Nothing via dashboard; every step scripted and reproducible"
+    },
+    {
+      "id": "t8",
+      "summary": "Pre-PR boundary and no-fabrication audit of the leg's diff",
+      "origin": "llm",
+      "status": "confirmed",
+      "acceptance_criteria": [
+        "the full branch diff is read and verifiably contains no OAuth, consent, Worker, SSR-adapter, or run-schema code; astro.config.mjs still has no adapter",
+        "grep of the built dist/ finds no latency/memory/quality figure that lacks a real measurement artifact in the repo"
+      ],
+      "deps": [
+        "t3",
+        "t4",
+        "t5",
+        "t6",
+        "t7"
+      ],
+      "covers": [
+        "c6",
+        "h11",
+        "h5"
+      ],
+      "instruction": "Read the full branch diff (git diff main...HEAD). Confirm zero OAuth/consent/Worker/SSR-adapter/run-schema code and astro.config.mjs still has no adapter. Build, then grep dist/ for numeric latency/memory/quality figures (regex for ms, GB, tok/s, percentages near metric words) \u2014 every hit must trace to a real measurement artifact or get reworded to 'not yet measured'. Record both results in the PR description"
+    },
+    {
+      "id": "t9",
+      "summary": "Go-live verification: deploy is live, static, and recorded",
+      "origin": "llm",
+      "status": "confirmed",
+      "acceptance_criteria": [
+        "after the merge-triggered deploy, curl -sI https://jetson-arena.com and https://www.jetson-arena.com both return 200 with the built HTML; output recorded in docs/hosting-runbook.md",
+        "a nonexistent path serves the static 404 (no function); view-source shows the static dist/ content",
+        "the contrast/reduced-motion checks re-run against the shipped pages and their output is recorded \u2014 nothing marked done from memory"
+      ],
+      "deps": [
+        "t8"
+      ],
+      "covers": [
+        "c1",
+        "h7",
+        "h1",
+        "c12",
+        "h12"
+      ],
+      "instruction": "Post-merge, after the deploy workflow succeeds: curl -sI https://jetson-arena.com and https://www.jetson-arena.com (expect 200 + text/html); curl a nonexistent path (expect the static 404 page, not a function response); spot-check view-source matches dist/. Re-run scripts/check-contrast.mjs against the shipped CSS. Append all outputs verbatim to docs/hosting-runbook.md in a follow-up commit. If any check fails, file it as a bug immediately \u2014 do not record success from memory"
+    }
+  ],
+  "risks": [
+    {
+      "id": "r1",
+      "text": "CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID must be set as repo secrets and exported locally by the operator \u2014 a credentialed step the agent cannot do; t1's whoami is the first check that the token works and reaches the zone",
+      "kind": "unknown_nonblocking",
+      "task_id": "t7"
+    },
+    {
+      "id": "r2",
+      "text": "Whether www serves the site directly or 301s to the apex \u2014 decidable during t7 without changing the frame",
+      "kind": "unknown_nonblocking",
+      "task_id": "t7"
+    },
+    {
+      "id": "r3",
+      "text": "t9 verifies a merge-triggered deploy, so it completes only after the PR merges \u2014 the one task that outlives the branch",
+      "kind": "unknown_nonblocking",
+      "task_id": "t9"
+    }
+  ]
+}
