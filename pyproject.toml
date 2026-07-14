@@ -1,6 +1,6 @@
 [project]
 name = "jetson-arena"
-version = "0.6.0"
+version = "0.6.1"
 description = "Agent and CLI for the Jetson Arena: how a given Jetson device handles a whole model stack. Benchmarks pipelines (e.g. realtime VAD + STT + LLM + TTS on an Orin Nano Super 8GB) for latency, memory signature and quality, then publishes results plus signed-in Docker build recipes. Also maintains the arena public site."
 readme = "README.md"
 license = "Apache-2.0"

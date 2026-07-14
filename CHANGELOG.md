@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/). This project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2026-07-14
+
+### Added
+
+- docs: t7 Cloudflare cutover and t9 go-live verification recorded in the hosting runbook (Pages project, custom domains, DNS content-swap, byte-parity evidence)
+
 ## [0.6.0] - 2026-07-14
 
 ### Added
