@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/). This project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-07-14
+
+### Added
+
+- **`docs/scope.md`** — a domain scope sketch for the arena: the whole-stack question, what latency / memory signature / quality mean under a realtime pipeline, the nouns the CLI will likely grow (`device`, `stack`, `run`, `result`, `recipe`, `board`), and the questions that are genuinely undecided (where the benchmark executes, what per-stage quality means, whether recipes are cryptographically signed or merely checked-in, where the site lives). Explicitly labelled a sketch, not a spec — converge it with `/think` before building.
+- `remember` and `recall` rows in `docs/skill-sources.md`. The two eidetic-cli memory skills landed in 0.4.0 but were never recorded in the provenance ledger, so the table listed 12 skills against 14 on disk. The ledger now states the 14-on-disk / 14-rows invariant and names the vendored tree as the truth if the two ever disagree.
+
+### Changed
+
+- **`CLAUDE.md` re-initialized from the bootstrap seed into a real runtime prompt** (`/init`). It documents the arena domain and the fact that none of it is built yet; the three agent-first CLI contracts (stdout/stderr never mix, `--json` everywhere, `CliError` instead of tracebacks) and the two rubric shape-rules that are easy to trip; the five touchpoints for adding a verb; the zero-runtime-dependency rule and why `whoami` hand-parses YAML; the `backend: colleague` → `AGENTS.colleague.md` identity mapping and what else must change alongside it; the cite-don't-import skills rule; and version-bump-every-PR.
+- **`README.md` rewritten for the agent rather than the template.** Leads with the whole-stack question the arena answers, adds an honest Status section (the domain surface is not built yet), and drops the template's `Make it your own` rename instructions — which pointed at a `git grep` procedure in `CLAUDE.md` that no longer exists.
+
+### Fixed
+
+- The seed `CLAUDE.md` claimed `culture.yaml` declares `backend: claude`. This agent was promoted to `backend: colleague` (resident prompt `AGENTS.colleague.md`) back in 0.3.4, so the claim was false; it is gone with the seed.
+- Stale vendored-skill count in `README.md` (11 → 14).
+
 ## [0.4.0] - 2026-06-23
 
 ### Added

@@ -14,6 +14,14 @@ the true origin. One skill, `ask-colleague` (formerly `outsource`), originates i
 renamed `convertible`. guildmaster's re-broadcast still carries the old
 `outsource` name, so `ask-colleague` is vendored **directly from colleague** as a
 tracked local divergence (see [below](#local-divergence--outsource--ask-colleague-2026-06-06)).
+Two more, `remember` and `recall`, are first-party to
+[`agentculture/eidetic-cli`](https://github.com/agentculture/eidetic-cli) (the
+write/read halves of one shared memory store) and are likewise vendored directly
+from their origin.
+
+The table below is the inventory of record: **14 skills on disk, 14 rows.** If
+they ever disagree, the vendored tree is the truth and this file is the bug —
+reconcile it in the same PR that adds or drops a skill.
 
 Every vendored `SKILL.md` carries `type: command`. jetson-arena
 declares a culture agent (`culture.yaml`, `backend: colleague`), and
@@ -33,6 +41,8 @@ is load-bearing, even where guildmaster's upstream copy omits it.
 | `think` | `../guildmaster/.claude/skills/think/` | **devague** (re-broadcast via guildmaster) | idea→spec leg of the devague workflow chain. Verbatim (already carried `type: command` at guildmaster). Origin/broadcast prose left verbatim. | 2026-05-26 (guildmaster 0.6.0) |
 | `spec-to-plan` | `../guildmaster/.claude/skills/spec-to-plan/` | **devague** (re-broadcast via guildmaster) | spec→plan leg of the devague workflow chain. Verbatim (already carried `type: command`). | 2026-05-26 (guildmaster 0.6.0) |
 | `assign-to-workforce` | `../guildmaster/.claude/skills/assign-to-workforce/` | **devague** (re-broadcast via guildmaster) | plan→parallel-implementation leg of the devague workflow chain. Verbatim (already carried `type: command`). | 2026-05-26 (guildmaster 0.6.0) |
+| `remember` | `../eidetic-cli/.claude/skills/remember/` | **eidetic-cli** (first-party; vendored directly) | Write half of the shared `~/.eidetic/memory` surface — drives `eidetic remember` (idempotent upsert of one JSON record or an NDJSON batch on stdin; dedup by id + content hash). `scripts/remember.sh` byte-verbatim; `SKILL.md` localized only in the illustrative `--scope <nick>` examples (the Provenance paragraph keeps "First-party to eidetic-cli"). Defaults to this agent's PRIVATE scope, reading the suffix from `culture.yaml`. Runtime dep: `eidetic` on PATH. | 2026-06-23 (eidetic-cli, direct) |
+| `recall` | `../eidetic-cli/.claude/skills/recall/` | **eidetic-cli** (first-party; vendored directly) | Read half of the same store — drives `eidetic recall` across four search modes (exact / approximate / keyword / hybrid), each hit carrying text, provenance metadata, a relevance `score`, and a freshness `signal`. `scripts/recall.sh` byte-verbatim; `SKILL.md` localized only in the `--scope <nick>` examples. Pairs with `remember`: Claude and the colleague backend share one store because both resolve the same suffix. Runtime dep: `eidetic` on PATH. | 2026-06-23 (eidetic-cli, direct) |
 | `ask-colleague` | `../colleague/.claude/skills/ask-colleague/` | **colleague** (renamed from convertible; vendored directly — guildmaster re-broadcast pending) | The first-party front door to the `colleague` CLI: hand a scoped task to a *different* engine/mind via `explore` / `review` / `write`, grade a finished work item via `feedback` (the ROI loop), and reap stale/corrupt `colleague/*` branches a crashed run left behind via `clean`. Every verb takes `--json` (result JSON on stdout, diagnostics on stderr). `explore`/`review` run isolated in a throwaway `git worktree`; `write` **previews by default** (throwaway worktree, no side effects) and refuses a dirty tree only when applying (`--apply` / `--pr`). Verbatim except one consumer-identifying clause in the Provenance paragraph (`colleague vendors from guildmaster` → `jetson-arena vendors from guildmaster`); already carried `type: command`. Optional runtime dep: **`colleague`** on PATH. | 2026-06-12 (colleague 1.7.0, direct) |
 
 ## Re-sync procedure
