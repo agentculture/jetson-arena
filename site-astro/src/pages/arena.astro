@@ -15,8 +15,8 @@ const intro = [
 ];
 
 // A run, defined before one exists. This is the unit the arena publishes:
-// one device, one ordered pipeline, measured together — never a model
-// benchmarked alone.
+// one device, one setup — a single model, a mixture, or an ordered
+// pipeline — measured together as one system.
 const runDefinition =
   "A run pairs one specific Jetson device with one setup — a single model, a mixture of models, or an ordered pipeline, under a pinned config — and measures that pairing as a single system, not as isolated parts. Every run will ship with the Docker recipe that reproduces it: the exact containers, models, and flags. Own the device, rerun the arena.";
 

@@ -1,19 +1,24 @@
 # jetson-arena
 
-**How does a given Jetson device handle a whole model stack?**
+**How does a given Jetson device handle a given model setup?**
 
-Not one model in isolation — the whole pipeline. A realtime VAD → STT → LLM →
-TTS loop puts four models on one 8GB Orin Nano Super, where they contend for
-VRAM, memory bandwidth, and the GPU. Each fits alone; the stack is what fails.
-jetson-arena benchmarks the stack for **latency**, **memory signature**, and
-**quality**, then publishes the results together with the Docker build recipes
-that reproduce them — and maintains the arena's public site.
+A setup can be a single model, a mixture of models, or a whole pipeline under
+a pinned config. The flagship example is still the realtime VAD → STT → LLM →
+TTS loop: four models on one board, contending for VRAM, memory bandwidth,
+and the GPU — each fits alone; the setup is what fails. jetson-arena
+benchmarks setups for **latency**, **memory signature**, and **quality**,
+then publishes the results together with the Docker build recipes that
+reproduce them — and maintains the arena's public site,
+[jetson-arena.com](https://jetson-arena.com). Device order: **Jetson Thor
+first**, then Jetson AGX Orin on JetPack 7.2, then Jetson Orin Nano Super
+8GB.
 
 ## Status
 
-**Early.** The domain surface is not built yet. What exists today is the
-agent-first CLI scaffold below, plus the mesh identity and the CI baseline —
-there is no benchmark runner, device probe, recipe store, or site. The intended
+**Early.** The benchmark domain surface is not built yet. What exists today is
+the agent-first CLI scaffold below, the mesh identity, the CI baseline, and
+the public site ([jetson-arena.com](https://jetson-arena.com), `site-astro/`)
+— there is no benchmark runner, device probe, or recipe store. The intended
 shape, and the questions still open, are written down in
 [`docs/scope.md`](docs/scope.md). Read that before proposing a design.
 

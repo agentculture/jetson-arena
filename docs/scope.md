@@ -8,16 +8,19 @@
 
 ## The question
 
-**How does a given Jetson device handle a whole model stack?**
+**How does a given Jetson device handle a given model setup?**
 
-The load-bearing word is *whole*. A published benchmark that says "model X runs
+A setup ranges from a single model through model mixtures to a whole
+pipeline under a pinned config (operator direction, 2026-07-14; device order:
+Thor, then AGX Orin on JetPack 7.2, then Orin Nano Super 8GB). For a whole
+pipeline the load-bearing word is *whole*. A published benchmark that says "model X runs
 at N tok/s on an Orin Nano" tells you almost nothing about whether X can be the
 LLM in a realtime voice loop on that same board, because in the loop it does not
 run alone. A realtime VAD → STT → LLM → TTS pipeline puts four models on one
 8GB device where they contend for VRAM, memory bandwidth, and the GPU itself.
 Each is fine in isolation. The stack is what fails.
 
-The arena benchmarks the stack.
+The arena benchmarks the setup — and for pipelines, the stack as a whole.
 
 ## What gets measured
 
