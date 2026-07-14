@@ -148,3 +148,102 @@ happened to `site.ts`, `types.ts`, `Header.astro`, `Footer.astro`,
   this environment) and **npm** on `PATH` to install and build.
 - No Python-side dependency changes — this ledger and `site-astro/` are
   additive; `jetson_arena/` and `pyproject.toml` are untouched.
+
+## Verified contracts
+
+The design contract inherited from `org` — every text/background pair
+`>= 4.5:1` (WCAG AA) in both themes, plus a `prefers-reduced-motion` kill
+switch that disables all animation site-wide — is asserted by `org`'s own
+palette comment (`site-astro/src/styles/global.css` lines 8-15) but had
+never been independently checked *on this repo's own palette* after the t3
+rebrand and the t4 arena page landed. Both are now verified below, with a
+repeatable script backing the contrast half.
+
+### Contrast (WCAG 2.x, threshold 4.5:1)
+
+Verified 2026-07-14 against `site-astro/src/styles/global.css` as committed
+on `agent/t5`. Re-run with `cd site-astro && npm run check:contrast`
+(`site-astro/scripts/check-contrast.mjs`, zero new npm dependencies). The
+script parses the light (`:root`) and dark
+(`@media (prefers-color-scheme: dark) { :root { ... } }`) token blocks
+straight out of `global.css`, resolves every hardcoded, evidence-cited
+text/background pairing the site's markup actually uses (see the `PAIRS`
+list in the script for the file:line evidence per row), and computes WCAG
+relative-luminance contrast ratios. All tokens in this palette are opaque
+`#rrggbb` hex literals, so no color-space approximation was needed; the
+script also supports `rgb()`/`hsl()` with alpha-compositing for forward
+compatibility, and documents in its own header comment that `oklch()`,
+`lab()`, and `color-mix()` are not yet handled and would need an explicit,
+documented approximation if ever adopted for a text or background token.
+
+| Pair | Light | Dark | Pass/fail |
+|---|---|---|---|
+| Body text on page background | 12.78 | 16.15 | PASS |
+| Muted/secondary text on page background | 6.86 | 8.88 | PASS |
+| Header wordmark on header background | 12.78 | 16.15 | PASS |
+| Header nav links on header background | 6.86 | 8.88 | PASS |
+| Footer wordmark on footer background | 12.78 | 16.15 | PASS |
+| Footer nav links + note on footer background | 6.86 | 8.88 | PASS |
+| Text on card/surface backgrounds (headings + body) | 13.91 | 14.32 | PASS |
+| Muted text on card/surface backgrounds | 7.46 | 7.88 | PASS |
+| Link/accent text on page background | 6.37 | 11.77 | PASS |
+| Link/accent text on card background | 6.93 | 10.44 | PASS |
+| FIRST TARGET chip — "First target" eyebrow label | 6.93 | 10.44 | PASS |
+| FIRST TARGET chip — device name | 13.91 | 14.32 | PASS |
+| FIRST TARGET chip — pipeline chain | 7.46 | 7.88 | PASS |
+| Skip-to-content link on surface background | 13.91 | 14.32 | PASS |
+
+All 14 pairs clear 4.5:1 in both themes — `npm run check:contrast` exits 0.
+The 14 named pairs reduce to six underlying token combinations
+(`{ink, ink-soft, accent} x {bg, surface}`); each is still listed under its
+own UI name because the task's coverage requirement asks for body, muted,
+card, link/accent-on-page, link/accent-on-card, header/footer, and
+chip/badge pairs individually, and the FIRST TARGET chip on the homepage
+draws on all three foreground tokens against `--surface`. No regression
+and no finding: every pair passes on this repo's own palette exactly as it
+passes on `org`'s, so no token was changed by this task. The script also
+runs an automated coverage guard — it scans `src/**/*.astro` and
+`src/styles/global.css` for every `color: var(--token)` declaration and
+fails if a foreground token appears that isn't covered by a `PAIRS` entry,
+so a future page that introduces a new text color without updating the
+pairing list is caught rather than silently unchecked.
+
+### Reduced motion
+
+Verified 2026-07-14 by reading `site-astro/src/styles/global.css` and
+grepping every `animation:`/`transition:` declaration across `src/`
+(components, layout, and pages). The mechanism is layered:
+
+1. **Every real animation/transition is opt-in.** All `animation:` and
+   `transition:` declarations in the codebase — the mesh node/halo
+   breathing (`HeroMesh.astro`), the hero glow and scroll-hint drift
+   (`index.astro`), the nav current-page dot (`Header.astro`), card hover
+   lift and link-arrow nudges (`global.css`, `index.astro`, `arena.astro`),
+   and the scroll-reveal transitions (`global.css`) — are declared inside
+   `@media (prefers-reduced-motion: no-preference) { ... }` blocks. No
+   motion exists outside that guard.
+2. **A site-wide kill switch, belt and braces.** `global.css` lines
+   358-375 add
+   `@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }`,
+   plus `::view-transition-group(*)`, `::view-transition-old(*)`, and
+   `::view-transition-new(*)` set to `animation: none !important`, and
+   `html { scroll-behavior: auto }` (overriding the smooth-scroll default).
+   This silences component-scoped motion too, in case a future component
+   declares `animation`/`transition` without its own media-query guard.
+3. **Entrance ("reveal") states are additionally gated behind JS.**
+   `[data-reveal]` elements only start hidden (`opacity: 0`,
+   `transform: translateY(1.4rem)`) under `html.js [data-reveal]` — and
+   `html.js` is only added by an inline script after first paint. So a
+   no-JS visit, and a `prefers-reduced-motion: reduce` visit (which never
+   enters the `no-preference` block that defines the hidden state), both
+   render every page fully composed and static from the first paint —
+   there is no flash of hidden content to disable.
+4. **CSS-only page cross-fades are inside the same opt-in guard.** The
+   `@view-transition { navigation: auto; }` at-rule lives inside the
+   `prefers-reduced-motion: no-preference` block, so a reduced-motion
+   visitor never opts into view-transition navigation in the first place;
+   the kill switch's `::view-transition-*` rule is the backstop.
+
+No divergence and no weakening: this mechanism matches the file's own
+header comment (`global.css` lines 11-15) verbatim and was not modified by
+this task.

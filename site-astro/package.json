@@ -10,7 +10,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:contrast": "node scripts/check-contrast.mjs"
   },
   "dependencies": {
     "@fontsource-variable/albert-sans": "^5.2.8",
