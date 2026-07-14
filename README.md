@@ -1,26 +1,29 @@
 # jetson-arena
 
-Agent and CLI for the Jetson Arena: how a given Jetson device handles a whole model stack. Benchmarks pipelines (e.g. realtime VAD + STT + LLM + TTS on an Orin Nano Super 8GB) for latency, memory signature and quality, then publishes results plus signed-in Docker build recipes. Also maintains the arena public site.
+**How does a given Jetson device handle a whole model stack?**
 
-## What you get
+Not one model in isolation — the whole pipeline. A realtime VAD → STT → LLM →
+TTS loop puts four models on one 8GB Orin Nano Super, where they contend for
+VRAM, memory bandwidth, and the GPU. Each fits alone; the stack is what fails.
+jetson-arena benchmarks the stack for **latency**, **memory signature**, and
+**quality**, then publishes the results together with the Docker build recipes
+that reproduce them — and maintains the arena's public site.
 
-- **An agent-first CLI** cited from [teken](https://github.com/agentculture/teken)
-  (`afi-cli`) — the runtime package has no third-party dependencies.
-- **A mesh identity** — `culture.yaml` (`suffix` + `backend`) and the matching
-  resident prompt file (`AGENTS.colleague.md`, since this template runs
-  `backend: colleague`).
-- **The canonical guildmaster skill kit** (11 skills) under `.claude/skills/`,
-  vendored cite-don't-import. See [`docs/skill-sources.md`](docs/skill-sources.md).
-- **A build + deploy baseline** — pytest, lint, the agent-first rubric gate, and
-  PyPI Trusted Publishing wired into GitHub Actions.
+## Status
+
+**Early.** The domain surface is not built yet. What exists today is the
+agent-first CLI scaffold below, plus the mesh identity and the CI baseline —
+there is no benchmark runner, device probe, recipe store, or site. The intended
+shape, and the questions still open, are written down in
+[`docs/scope.md`](docs/scope.md). Read that before proposing a design.
 
 ## Quickstart
 
 ```bash
 uv sync
 uv run pytest -n auto                 # run the test suite
-uv run jetson-arena whoami  # identity from culture.yaml
-uv run jetson-arena learn   # self-teaching prompt (add --json)
+uv run jetson-arena whoami            # identity from culture.yaml
+uv run jetson-arena learn             # self-teaching prompt (add --json)
 uv run teken cli doctor . --strict    # the agent-first rubric gate CI runs
 ```
 
@@ -39,20 +42,27 @@ Every command supports `--json`. Results go to stdout, errors/diagnostics to
 stderr (never mixed). Exit codes: `0` success, `1` user error, `2` environment
 error, `3+` reserved.
 
-## Make it your own
+## How it is put together
 
-1. Rename the package `jetson_arena/` and the `jetson-arena`
-   CLI/dist name throughout `pyproject.toml`, the package, `tests/`,
-   `sonar-project.properties`, and this `README.md`. The name is hard-coded in
-   ~100 places, so list every occurrence first — see the `git grep` discovery
-   command in [`CLAUDE.md`](CLAUDE.md), the authoritative rename procedure.
-2. Edit `culture.yaml` with your `suffix` and `backend`.
-3. Rewrite `CLAUDE.md` for your agent and run `/init`.
-4. Re-vendor only the skills you need from guildmaster (see
-   [`docs/skill-sources.md`](docs/skill-sources.md)).
+- **An agent-first CLI** cited from [teken](https://github.com/agentculture/teken)
+  (`afi-cli`) — the runtime package has no third-party dependencies, and the
+  contracts above are enforced in CI by a rubric gate that drives the built CLI
+  as a black box.
+- **A mesh identity** — `culture.yaml` (`suffix` + `backend`) and the matching
+  resident prompt file (`AGENTS.colleague.md`, since this agent runs
+  `backend: colleague`). `CLAUDE.md` is the parallel prompt for Claude Code.
+- **The guildmaster skill kit** (14 skills) under `.claude/skills/`, vendored
+  cite-don't-import. Provenance ledger:
+  [`docs/skill-sources.md`](docs/skill-sources.md).
+- **A build + deploy baseline** — pytest, lint, the agent-first rubric gate, and
+  PyPI Trusted Publishing wired into GitHub Actions.
 
-See [`CLAUDE.md`](CLAUDE.md) for the full conventions (version-bump-every-PR,
-the `cicd` PR lane, deploy setup).
+## Contributing
+
+Every PR bumps the version — docs-only ones included. CI enforces it, because a
+merge to `main` publishes to PyPI and a repeated version is a failed publish. See
+[`CLAUDE.md`](CLAUDE.md) for the full conventions: the CLI contract, the
+vendored-skills rule, and the `cicd` PR lane.
 
 ## License
 
